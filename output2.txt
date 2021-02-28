@@ -3,16 +3,16 @@ Individuals
 |   ID   |        Name        | Gender |   Birthday  | Age | Alive |    Death     | Child  | Spouse |
 +--------+--------------------+--------+-------------+-----+-------+--------------+--------+--------+
 | @I1@   |   Suzy /Smith/     |   F    | 1 JAN 1998  |  23 |  True |     N/A      |  N/A   |  N/A   |
-| @I2@   |   Sean /Smith/     |   M    | 3 JAN 1959  |  62 | False | 11 AUG 2018  | @I1@   | @I3@   |
+| @I2@   |   Sean /Smith/     |   M    | 3 JAN 1959  |  59 | False | 11 AUG 2018  | @I1@   | @I3@   |
 | @I3@   | Sharon /Johnson/   |   F    | 2 JAN 1963  |  58 |  True |     N/A      | @I1@   | @I12@  |
-| @I4@   |  Jerry /Johnson/   |   M    | 5 JAN 1940  |  81 | False | 9 SEP 2005   | @I3@   | @I5@   |
-| @I5@   |  Janice /Little/   |   F    | 8 JAN 1940  |  81 | False | 23 AUG 2006  | @I3@   | @I4@   |
+| @I4@   |  Jerry /Johnson/   |   M    | 5 JAN 1940  |  65 | False | 9 SEP 2005   | @I3@   | @I5@   |
+| @I5@   |  Janice /Little/   |   F    | 8 JAN 1940  |  66 | False | 23 AUG 2006  | @I3@   | @I4@   |
 | @I6@   |  Shamus /Smith/    |   M    | 6 MAY 1940  |  80 |  True |     N/A      | @I9@   | @I7@   |
-| @I7@   | Shayla /Pullman/   |   F    | 3 APR 1942  |  78 | False | 10 JUN 2000  | @I2@   | @I6@   |
+| @I7@   | Shayla /Pullman/   |   F    | 3 APR 1942  |  58 | False | 10 JUN 2000  | @I2@   | @I6@   |
 | @I8@   |    Karen /Lee/     |   F    | 4 APR 1942  |  78 |  True |     N/A      | @I9@   |  N/A   |
 | @I9@   |   Julie /Smith/    |   F    | 4 MAY 1965  |  55 |  True |     N/A      |  N/A   |  N/A   |
-| @I10@  |  Gary /Johnson/    |   M    | 5 APR 1919  | 101 | False | 10 SEP 1990  | @I4@   | @I11@  |
-| @I11@  | Gertrude /Gaines/  |   F    | 5 JUL 1920  | 100 | False | 22 AUG 1988  | @I4@   | @I10@  |
+| @I10@  |  Gary /Johnson/    |   M    | 5 APR 1919  |  71 | False | 10 SEP 1990  | @I4@   | @I11@  |
+| @I11@  | Gertrude /Gaines/  |   F    | 5 JUL 1920  |  68 | False | 22 AUG 1988  | @I4@   | @I10@  |
 | @I12@  |   Derek /Wall/     |   M    | 5 MAY 1960  |  60 |  True |     N/A      | @I13@  | @I3@   |
 | @I13@  |   Darryl /Wall/    |   M    | 3 APR 1995  |  25 |  True |     N/A      |  N/A   |  N/A   |
 +--------+--------------------+--------+-------------+-----+-------+--------------+--------+--------+

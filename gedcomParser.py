@@ -77,11 +77,14 @@ for line in Lines:
         #Name check
         if(tag == "NAME"):
             person_list[person_count-1]["Name"] = arguments
+            continue
         if(tag == "SEX"):
             person_list[person_count-1]["Gender"] = arguments
+            continue
         #Alive and Age Check
         if(tag == "BIRT"):
             birt_last = True
+            continue
         if(tag == "DATE" and birt_last == True):
             deat_next = True
             born = parse(arguments) 
@@ -92,9 +95,10 @@ for line in Lines:
         if(tag == "DATE" and deat_next == True):
             person_list[person_count-1]["Alive"] = False
             person_list[person_count-1]["Death"] = arguments
+            death = parse(arguments)
+            person_list[person_count-1]["Age"] = (death.year - born.year - ((death.month, death.day) < (born.month, born.day)))
             deat_next = False
-        #returning to top of loop
-        continue
+            continue
     #up to death of individual
     if( tag == "FAMC" or tag == "FAMS"):
         if(deat_next == True):
