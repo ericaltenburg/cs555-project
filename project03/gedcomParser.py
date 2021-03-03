@@ -42,6 +42,7 @@ marr_last = False
 husb_next = False
 wife_next = False
 chil_next = False
+fams_last
 
 for line in Lines:
     #initializing line variables
@@ -82,7 +83,7 @@ for line in Lines:
         #jump back to first loop
         continue
     #checking still in individual tags
-    if( indi_hit == True and (tag != "FAMC" and tag != "FAMS") ):
+    if( indi_hit == True ):
         #Appending to individual dictionary - Checks
         #Name check
         if(tag == "NAME"):
@@ -109,15 +110,23 @@ for line in Lines:
             person_list[person_count-1]["Age"] = (death.year - born.year - ((death.month, death.day) < (born.month, born.day)))
             deat_next = False
             continue
-    #up to death of individual
-    if( tag == "FAMC" or tag == "FAMS"):
-        if(deat_next == True):
-            person_list[person_count-1]["Alive"] = True
-            person_list[person_count-1]["Death"] = "N/A"
-            deat_next = False
+        #up to death of individual
+        if( tag == "FAMC" or tag == "FAMS"):
+            if(deat_next == True):
+                person_list[person_count-1]["Alive"] = True
+                person_list[person_count-1]["Death"] = "N/A"
+                deat_next = False
         #ADDING TO LIST CHILD AND SPOUSE
-        person_list[person_count-1]["Child"] = "N/A"
-        person_list[person_count-1]["Spouse"] = "N/A"
+        if(tag == "FAMS"):
+            person_list[person_count-1]["Spouse"] = arguments
+            fams_last = True
+        if(tag == "FAMC"):
+            if(fams_last == False):
+                person_list[person_count-1]["Spouse"] = "N/A"
+                person_list[person_count-1]["Child"] = arguments
+            else:
+                person_list[person_count-1]["Child"] = arguments
+                fams_last = False
         indi_hit = False
         continue
     #Child and Spouse Check & Family Table build
@@ -165,12 +174,12 @@ for line in Lines:
             else:
                 family_list[family_count-1]["Children"] = arguments
             #adds children to person list
-            for p_dict in person_list:
-                if (p_dict["ID"] == family_list[family_count-1]["Husband ID"]):
-                    p_dict["Child"] = family_list[family_count-1]["Children"]
-                if (p_dict["ID"] == family_list[family_count-1]["Wife ID"]):
-                    p_dict["Child"] = family_list[family_count-1]["Children"]
-            continue
+##            for p_dict in person_list:
+##                if (p_dict["ID"] == family_list[family_count-1]["Husband ID"]):
+##                    p_dict["Child"] = family_list[family_count-1]["Children"]
+##                if (p_dict["ID"] == family_list[family_count-1]["Wife ID"]):
+##                    p_dict["Child"] = family_list[family_count-1]["Children"]
+##            continue
         #married and divorced check
         #wait for date arguments
         if(marr_next == True and tag != "MARR" and tag!="DATE"):
@@ -182,11 +191,11 @@ for line in Lines:
         if(marr_next == True and tag == "DATE"):
             family_list[family_count-1]["Married"] = arguments
             #adds spouse to person list
-            for p_dict in person_list:
-                if (p_dict["ID"] == family_list[family_count-1]["Husband ID"]):
-                    p_dict["Spouse"] = family_list[family_count-1]["Wife ID"]
-                if (p_dict["ID"] == family_list[family_count-1]["Wife ID"]):
-                    p_dict["Spouse"] = family_list[family_count-1]["Husband ID"]
+##            for p_dict in person_list:
+##                if (p_dict["ID"] == family_list[family_count-1]["Husband ID"]):
+##                    p_dict["Spouse"] = family_list[family_count-1]["Wife ID"]
+##                if (p_dict["ID"] == family_list[family_count-1]["Wife ID"]):
+##                    p_dict["Spouse"] = family_list[family_count-1]["Husband ID"]
             marr_next = False
             div_next = True
             continue
