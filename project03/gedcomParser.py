@@ -3,16 +3,16 @@
 from prettytable import PrettyTable
 from datetime import date
 from dateutil.parser import parse
-from pymongo import MongoClient
-import os
-from dotenv import load_dotenv
+# from pymongo import MongoClient
+# import os
+# from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
 # Load MONGOURI from .env and create db
-MONGOURI = os.getenv('mongoURI')
-client = MongoClient(port=27017)
-db = client.gedcom
+# MONGOURI = os.getenv('mongoURI')
+# client = MongoClient(port=27017)
+# db = client.gedcom
 
 individuals = PrettyTable()
 individuals.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
@@ -42,7 +42,7 @@ marr_last = False
 husb_next = False
 wife_next = False
 chil_next = False
-fams_last
+fams_last = False
 
 for line in Lines:
     #initializing line variables
@@ -214,7 +214,7 @@ for line in Lines:
 for indiv_dict in person_list:
     individuals.add_row(indiv_dict.values())
     # Add to collection for individuals
-    db.individuals.insert_one(indiv_dict)
+    # db.individuals.insert_one(indiv_dict)
 print("Done adding individuals to \'individuals\' collection.")
 #adding families in the end
 for fam_dict in family_list:
@@ -224,7 +224,7 @@ for fam_dict in family_list:
         fam_dict[key] = "N/A"
     families.add_row(fam_dict.values())
     # Add to collection for families
-    db.families.insert_one(fam_dict)
+    # db.families.insert_one(fam_dict)
 print("Done adding families to \'families\' collection.")
         
         
