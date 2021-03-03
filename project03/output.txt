@@ -1,3 +1,5 @@
+Done adding individuals to 'individuals' collection.
+Done adding families to 'families' collection.
 Individuals
 +--------+--------------------+--------+-------------+-----+-------+--------------+--------+--------+
 |   ID   |        Name        | Gender |   Birthday  | Age | Alive |    Death     | Child  | Spouse |

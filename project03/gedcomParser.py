@@ -206,6 +206,7 @@ for indiv_dict in person_list:
     individuals.add_row(indiv_dict.values())
     # Add to collection for individuals
     db.individuals.insert_one(indiv_dict)
+print("Done adding individuals to \'individuals\' collection.")
 #adding families in the end
 for fam_dict in family_list:
     #Fills in last family if not complete
@@ -215,6 +216,7 @@ for fam_dict in family_list:
     families.add_row(fam_dict.values())
     # Add to collection for families
     db.families.insert_one(fam_dict)
+print("Done adding families to \'families\' collection.")
         
         
 print("Individuals")
