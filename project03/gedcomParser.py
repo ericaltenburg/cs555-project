@@ -116,19 +116,22 @@ for line in Lines:
                 person_list[person_count-1]["Alive"] = True
                 person_list[person_count-1]["Death"] = "N/A"
                 deat_next = False
-        #ADDING TO LIST CHILD AND SPOUSE
-        if(tag == "FAMS"):
-            person_list[person_count-1]["Spouse"] = arguments
-            fams_last = True
-        if(tag == "FAMC"):
-            if(fams_last == False):
-                person_list[person_count-1]["Spouse"] = "N/A"
-                person_list[person_count-1]["Child"] = arguments
-            else:
-                person_list[person_count-1]["Child"] = arguments
-                fams_last = False
-        indi_hit = False
-        continue
+        #adding child and spouse
+            if(tag == "FAMS"):
+                person_list[person_count-1]["Spouse"] = arguments
+                fams_last = True
+                continue
+            if(tag == "FAMC"):
+                if(not fams_last):
+                    person_list[person_count-1]["Spouse"] = "N/A"
+                    person_list[person_count-1]["Child"] = arguments
+                else:
+                    person_list[person_count-1]["Child"] = arguments
+                    fams_last = False
+            #finish individual
+            indi_hit = False
+            continue
+
     #Child and Spouse Check & Family Table build
     #((tag == "TYPE" and arguments == "Ending") or (tag == "TRLR"))
     if(indi_hit == False and person_list):
@@ -212,6 +215,11 @@ for line in Lines:
 
 #adding individuals in the end
 for indiv_dict in person_list:
+     #Fills in child column if not complete
+    if("Spouse" not in indiv_dict):
+       indiv_dict["Spouse"] = "N/A"
+    if("Child" not in indiv_dict):
+       indiv_dict["Child"] = "N/A"
     individuals.add_row(indiv_dict.values())
     # Add to collection for individuals
     # db.individuals.insert_one(indiv_dict)
