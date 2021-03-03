@@ -161,7 +161,7 @@ for line in Lines:
             chil_next = False
             marr_next = True
             if "Children" in family_list[family_count-1]:
-                (family_list[family_count-1]["Children"]).append(arguments)
+                (family_list[family_count-1]["Children"]) += (arguments)
             else:
                 family_list[family_count-1]["Children"] = arguments
             #adds children to person list
