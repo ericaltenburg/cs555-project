@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-Load MONGOURI from .env and create db
+# Load MONGOURI from .env and create db
 MONGOURI = os.getenv('mongoURI')
 client = MongoClient(port=27017)
 db = client.gedcom
