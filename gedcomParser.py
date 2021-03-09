@@ -1,7 +1,7 @@
 #Sarah Wiessler
 
 from prettytable import PrettyTable
-from datetime import date
+from datetime import *
 from dateutil.parser import parse
 from pymongo import MongoClient
 import os
@@ -44,6 +44,24 @@ wife_next = False
 chil_next = False
 fams_last = False
 
+#US01 date before current date method - sw
+def before_current_date(date_args, curr_name, curr_id, prev_tag):
+    if datetime.date(parse(date_args)) > today:
+        print("Error US01: "+prev_tag+" date of "+curr_name+"("+curr_id+") occurs before the current date.")
+        #returning for unit testing 
+        return str("Error US01: "+prev_tag+" date of "+curr_name+"("+curr_id+") occurs before the current date.")
+    else:
+        return
+#US02 birth of individual before marriage of individual
+def marriage_before_birth(marr_date, birth_date, curr_name, curr_id):
+    if datetime.date(parse(marr_date)) <  datetime.date(parse(birth_date)):
+        print("Error US02: Marriage date of "+curr_name+"("+curr_id+") occurs before their birth date.")
+        #returning for unit testing 
+        return str("Error US02: Marriage date of "+curr_name+"("+curr_id+") occurs before their birth date.")
+    else:
+        return
+    
+#parsing file
 for line in Lines:
     #initializing line variables
     split = line.split()
@@ -101,6 +119,8 @@ for line in Lines:
             born = parse(arguments) 
             person_list[person_count-1]["Birthday"] = arguments
             person_list[person_count-1]["Age"] = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+            #us01
+            before_current_date(arguments, person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), "Birth")
             birt_last = False
             continue
         if(tag == "DATE" and deat_next == True):
@@ -108,6 +128,8 @@ for line in Lines:
             person_list[person_count-1]["Death"] = arguments
             death = parse(arguments)
             person_list[person_count-1]["Age"] = (death.year - born.year - ((death.month, death.day) < (born.month, born.day)))
+            #us01
+            before_current_date(arguments, person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), "Death")
             deat_next = False
             continue
         #up to death of individual
@@ -182,34 +204,36 @@ for line in Lines:
 ##                    p_dict["Child"] = family_list[family_count-1]["Children"]
 ##                if (p_dict["ID"] == family_list[family_count-1]["Wife ID"]):
 ##                    p_dict["Child"] = family_list[family_count-1]["Children"]
-##            continue
+            continue
         #married and divorced check
         #wait for date arguments
-        if(marr_next == True and tag != "MARR" and tag!="DATE"):
+        if(marr_next == True and (tag != "MARR" and tag!="DATE")):
             family_list[family_count-1]["Married"] = "N/A"
             marr_next = False
             div_next = True
-        elif(marr_next == True and tag == "MARR"):
+        if(marr_next == True and tag == "MARR"):
             continue
         if(marr_next == True and tag == "DATE"):
             family_list[family_count-1]["Married"] = arguments
-            #adds spouse to person list
-##            for p_dict in person_list:
-##                if (p_dict["ID"] == family_list[family_count-1]["Husband ID"]):
-##                    p_dict["Spouse"] = family_list[family_count-1]["Wife ID"]
-##                if (p_dict["ID"] == family_list[family_count-1]["Wife ID"]):
-##                    p_dict["Spouse"] = family_list[family_count-1]["Husband ID"]
+            #us02
+            for p_dict in person_list:
+                if (p_dict["ID"] == family_list[family_count-1]["Husband ID"] or p_dict["ID"] == family_list[family_count-1]["Wife ID"]):
+                    marriage_before_birth(arguments, p_dict["Birthday"], p_dict["Name"], p_dict["ID"].strip())    
+            #us01
+            before_current_date(arguments, "Family", family_list[family_count-1]["ID"].strip(), "Marriage")
             marr_next = False
             div_next = True
             continue
-        if(div_next == True and tag != "DIV" and tag != "DATE"):
+        if(div_next == True and (tag != "DIV" and tag != "DATE")):
             family_list[family_count-1]["Divorced"] = "N/A"
             div_next = False
             continue
-        elif(div_next == True and tag == "DIV"):
+        if(div_next == True and tag == "DIV"):
             continue
         if(div_next == True and tag == "DATE"):
             family_list[family_count-1]["Divorced"] = arguments
+            #us01
+            before_current_date(arguments, "Family", family_list[family_count-1]["ID"].strip(), "Divorce")
             div_next = False
             continue
 
