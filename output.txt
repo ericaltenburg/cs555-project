@@ -31,14 +31,14 @@ Individuals
 | @I25@  |   Emily /Kaletcher/   |   F    | 16 OCT 1998  |  22 |  True |     N/A      |  N/A  | @F7@   |
 +--------+-----------------------+--------+--------------+-----+-------+--------------+-------+--------+
 Families
-+-------+------------+----------------------+---------+-----------------------+------------------------+--------------+----------+
-|   ID  | Husband ID |     Husband Name     | Wife ID |       Wife Name       |        Children        |   Married    | Divorced |
-+-------+------------+----------------------+---------+-----------------------+------------------------+--------------+----------+
-| @F1@  |   @I2@     |   Bill /Chasnov/     |  @I1@   |     Laney /Smith/     | @I4@ @I5@ @I10@ @I14@  | 6 JUN 1950   |   N/A    |
-| @F2@  |   @I2@     |   Bill /Chasnov/     |   N/A   |          N/A          |         @I3@           |     N/A      |   N/A    |
-| @F3@  |   @I6@     |  James /Garfield/    |  @I4@   |    Robyn /Chasnov/    |    @I7@ @I8@ @I9@      | 2 JUL 1993   |   N/A    |
-| @F4@  |   @I10@    |   Craig /Chasnov/    |  @I11@  |     Kelly /Adams/     |      @I12@ @I13@       | 28 APR 1994  |   N/A    |
-| @F5@  |   @I15@    | Richard /Altenburg/  |  @I14@  |    Donna /Chasnov/    |      @I16@ @I17@       | 29 OCT 1986  |   N/A    |
-| @F6@  |   @I18@    | Richard /Altenburg/  |  @I19@  | Loretta /Florkowski/  |   @I15@ @I20@ @I21@    | 4 OCT 1959   |   N/A    |
-| @F7@  |   @I22@    |  Steve /Kaletcher/   |  @I21@  |  Valorie /Altenburg/  |   @I23@ @I24@ @I25@    | 31 OCT 1979  |   N/A    |
-+-------+------------+----------------------+---------+-----------------------+------------------------+--------------+----------+
++-------+------------+----------------------+---------+-----------------------+------------------------+--------------+-------------+
+|   ID  | Husband ID |     Husband Name     | Wife ID |       Wife Name       |        Children        |   Married    |   Divorced  |
++-------+------------+----------------------+---------+-----------------------+------------------------+--------------+-------------+
+| @F1@  |   @I2@     |   Bill /Chasnov/     |  @I1@   |     Laney /Smith/     | @I4@ @I5@ @I10@ @I14@  | 6 JUN 1950   | 4 APR 1979  |
+| @F2@  |   @I2@     |   Bill /Chasnov/     |   N/A   |          N/A          |         @I3@           |     N/A      |     N/A     |
+| @F3@  |   @I6@     |  James /Garfield/    |  @I4@   |    Robyn /Chasnov/    |    @I7@ @I8@ @I9@      | 2 JUL 1993   |     N/A     |
+| @F4@  |   @I10@    |   Craig /Chasnov/    |  @I11@  |     Kelly /Adams/     |      @I12@ @I13@       | 28 APR 1994  |     N/A     |
+| @F5@  |   @I15@    | Richard /Altenburg/  |  @I14@  |    Donna /Chasnov/    |      @I16@ @I17@       | 29 OCT 1986  |     N/A     |
+| @F6@  |   @I18@    | Richard /Altenburg/  |  @I19@  | Loretta /Florkowski/  |   @I15@ @I20@ @I21@    | 4 OCT 1959   |     N/A     |
+| @F7@  |   @I22@    |  Steve /Kaletcher/   |  @I21@  |  Valorie /Altenburg/  |   @I23@ @I24@ @I25@    | 31 OCT 1979  |     N/A     |
++-------+------------+----------------------+---------+-----------------------+------------------------+--------------+-------------+

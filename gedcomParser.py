@@ -224,11 +224,12 @@ for line in Lines:
             marr_next = False
             div_next = True
             continue
-        if(div_next == True and (tag != "DIV" and tag != "DATE")):
+        if(div_next == True and (tag != "DIV" and tag != "DATE" and tag!="PLAC")):
             family_list[family_count-1]["Divorced"] = "N/A"
             div_next = False
-            continue
         if(div_next == True and tag == "DIV"):
+            continue
+        if(div_next == True and tag == "PLAC"):
             continue
         if(div_next == True and tag == "DATE"):
             family_list[family_count-1]["Divorced"] = arguments
