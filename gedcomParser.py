@@ -60,6 +60,14 @@ def marriage_before_birth(marr_date, birth_date, curr_name, curr_id):
         return str("Error US02: Marriage date of "+curr_name+"("+curr_id+") occurs before their birth date.")
     else:
         return
+#US03 birth before death of individual - mm
+def death_before_birth(death_date, birth_date, curr_name, curr_id):
+    if datetime.date(parse(death_date)) < datetime.date(parse(birth_date)):
+        print("Error US03: Death date of "+curr_name+"("+curr_id+") occurs before their birth date.")
+        #returning for unit testing 
+        return "Error US03: Death date of "+curr_name+"("+curr_id+") occurs before their birth date."
+    else:
+        return
     
 #parsing file
 for line in Lines:
@@ -131,6 +139,10 @@ for line in Lines:
             #us01
             before_current_date(arguments, person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), "Death")
             deat_next = False
+            #us03
+            for p_dict in person_list:
+                if person_list[person_count-1]["Age"] < 0:
+                    death_before_birth(p_dict["Death"], p_dict["Birthday"], p_dict["Name"], p_dict["ID"].strip())
             continue
         #up to death of individual
         if( tag == "FAMC" or tag == "FAMS"):

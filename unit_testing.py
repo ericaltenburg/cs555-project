@@ -11,6 +11,9 @@ class TestGedcome(unittest.TestCase):
     def test_marriage_before_birth(self):
         self.assertEqual(marriage_before_birth("01-01-1900", "01-01-2000", "Julie", "I01"),
                          "Error US02: Marriage date of Julie(I01) occurs before their birth date.")
+    def test_death_before_birth(self):
+        self.assertEqual(death_before_birth("01-01-1999", "01-01-2000", "Sam", "I02"),
+                         "Error US03: Death date of Sam(I02) occurs before their birth date.")
 
 if __name__ == '__main__':
     unittest.main()
