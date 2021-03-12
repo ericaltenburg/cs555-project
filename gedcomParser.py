@@ -68,6 +68,14 @@ def death_before_birth(death_date, birth_date, curr_name, curr_id):
         return "Error US03: Death date of "+curr_name+"("+curr_id+") occurs before their birth date."
     else:
         return
+#US04 marriage before divorce of spouses - mm
+def divorce_before_marriage(div_date, marr_date, curr_name, curr_id):
+    if datetime.date(parse(div_date)) < datetime.date(parse(marr_date)):
+        print("Error US04: Divorce date of "+curr_name+"("+curr_id+") occurs before their marriage date.")
+        #returning for unit testing 
+        return "Error US04: Divorce date of "+curr_name+"("+curr_id+") occurs before their marriage date."
+    else:
+        return
     
 #parsing file
 for line in Lines:
@@ -248,6 +256,10 @@ for line in Lines:
             #us01
             before_current_date(arguments, "Family", family_list[family_count-1]["ID"].strip(), "Divorce")
             div_next = False
+            #us04
+            for p_dict in person_list:
+                if (p_dict["ID"] == family_list[family_count-1]["Husband ID"] or p_dict["ID"] == family_list[family_count-1]["Wife ID"]):
+                    divorce_before_marriage(family_list[family_count-1]["Divorced"], family_list[family_count-1]["Married"], p_dict["Name"], p_dict["ID"].strip())
             continue
 
 #adding individuals in the end
