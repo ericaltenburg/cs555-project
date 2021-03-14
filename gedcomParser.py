@@ -76,6 +76,14 @@ def divorce_before_marriage(div_date, marr_date, curr_name, curr_id):
         return "Error US04: Divorce date of "+curr_name+"("+curr_id+") occurs before their marriage date."
     else:
         return
+#US07 Less than 150 years old
+def greater_than_150(curr_age,curr_name, curr_id):
+    if int(curr_age) >= 150:
+        error_str = "Error US07: Age of " +curr_name+"("+curr_id+") is not less than 150."
+        print(error_str)
+        return error_str
+    else:
+        return
     
 #parsing file
 for line in Lines:
@@ -133,7 +141,7 @@ for line in Lines:
         if(tag == "DATE" and birt_last == True):
             deat_next = True
             born = parse(arguments) 
-            person_list[person_count-1]["Birthday"] = arguments
+            person_list[person_count-1] ["Birthday"] = arguments
             person_list[person_count-1]["Age"] = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
             #us01
             before_current_date(arguments, person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), "Birth")
@@ -151,6 +159,10 @@ for line in Lines:
             for p_dict in person_list:
                 if person_list[person_count-1]["Age"] < 0:
                     death_before_birth(p_dict["Death"], p_dict["Birthday"], p_dict["Name"], p_dict["ID"].strip())
+            #us07
+            for p_dict in person_list:
+                if person_list[person_count-1]["Age"] < 0:
+                    greater_than_150(p_dict["Age"], p_dict["Name"], p_dict["ID"].strip())
             continue
         #up to death of individual
         if( tag == "FAMC" or tag == "FAMS"):

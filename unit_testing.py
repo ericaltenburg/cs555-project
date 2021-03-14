@@ -17,6 +17,7 @@ class TestGedcome(unittest.TestCase):
     def test_divorce_before_marriage(self):
         self.assertEqual(divorce_before_marriage("01-01-1999", "01-01-2000", "Jack", "I02"),
                          "Error US04: Divorce date of Jack(I02) occurs before their marriage date.")                     
-
+    def test_greater_than_150(self):
+        self.assertEqual(greater_than_150("150", "Jill", "I09"), "Error US07: Age of Jill(I09) is not less than 150.")
 if __name__ == '__main__':
     unittest.main()
