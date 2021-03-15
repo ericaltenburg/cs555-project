@@ -3,6 +3,7 @@
 from prettytable import PrettyTable
 from datetime import *
 from dateutil.parser import parse
+from dateutil.relativedelta import relativedelta
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
@@ -84,10 +85,16 @@ def greater_than_150(curr_age,curr_name, curr_id):
         return error_str
     else:
         return
+
+
 #US08 Birth before marriage of parents
-def birth_before_marriage(birth_date, marr_date, curr_name, curr_id, fam_id):
+def birth_before_marriage(birth_date, marr_date, div_date, curr_name, curr_id, fam_id):
     if datetime.date(parse(birth_date)) < datetime.date(parse(marr_date)):
-        anom_str = "Anomaly US08: Birth date of " +curr_name+"("+curr_id+") occurs before the marriage date of his parents in Family " + fam_id + "."
+        anom_str = "Anomaly US08: Birth date of " +curr_name+"("+curr_id+") occurs before the marriage date of their parents in Family " + fam_id + "."
+        print(anom_str)
+        return anom_str
+    elif div_date != "N/A" and datetime.date(parse(birth_date)) > (datetime.date(parse(div_date))+relativedelta(months=+9)):
+        anom_str = "Anomaly US08: Birth date of " +curr_name+"("+curr_id+") occurs 9 months after the divorce date of their parents in Family " + fam_id + "."
         print(anom_str)
         return anom_str
     else:
@@ -263,12 +270,6 @@ for line in Lines:
             before_current_date(arguments, "Family", family_list[family_count-1]["ID"].strip(), "Marriage")
             marr_next = False
             div_next = True
-            #US08
-            children_list_split = family_list[family_count-1]["Children"].split()
-            for child in children_list_split:
-                for p_dict in person_list:
-                    if p_dict["ID"].strip() == child:
-                        birth_before_marriage(p_dict["Birthday"], family_list[family_count-1]["Married"], p_dict["Name"], p_dict["ID"].strip(), family_list[family_count-1]["ID"].strip())
             continue
         if(div_next == True and (tag != "DIV" and tag != "DATE" and tag!="PLAC")):
             family_list[family_count-1]["Divorced"] = "N/A"
@@ -286,6 +287,12 @@ for line in Lines:
             for p_dict in person_list:
                 if (p_dict["ID"] == family_list[family_count-1]["Husband ID"] or p_dict["ID"] == family_list[family_count-1]["Wife ID"]):
                     divorce_before_marriage(family_list[family_count-1]["Divorced"], family_list[family_count-1]["Married"], p_dict["Name"], p_dict["ID"].strip())
+            #US08
+            children_list_split = family_list[family_count-1]["Children"].split()
+            for child in children_list_split:
+                for p_dict in person_list:
+                    if p_dict["ID"].strip() == child:
+                        birth_before_marriage(p_dict["Birthday"], family_list[family_count-1]["Married"], family_list[family_count-1]["Divorced"], p_dict["Name"], p_dict["ID"].strip(), family_list[family_count-1]["ID"].strip())
             continue
 
 #adding individuals in the end
