@@ -46,41 +46,41 @@ chil_next = False
 fams_last = False
 
 #US01 date before current date method - sw
-def before_current_date(date_args, curr_name, curr_id, prev_tag):
+def before_current_date(date_args, curr_name, curr_id, prev_tag, lineNum):
     if datetime.date(parse(date_args)) > today:
-        print("Error US01: "+prev_tag+" date of "+curr_name+"("+curr_id+") occurs before the current date.")
+        print("Error US01: "+prev_tag+" date of "+curr_name+"("+curr_id+") occurs before the current date on line "+lineNum+".")
         #returning for unit testing 
-        return str("Error US01: "+prev_tag+" date of "+curr_name+"("+curr_id+") occurs before the current date.")
+        return str("Error US01: "+prev_tag+" date of "+curr_name+"("+curr_id+") occurs before the current date on line "+lineNum+".")
     else:
         return
 #US02 birth of individual before marriage of individual
-def marriage_before_birth(marr_date, birth_date, curr_name, curr_id):
+def marriage_before_birth(marr_date, birth_date, curr_name, curr_id, lineNum):
     if datetime.date(parse(marr_date)) <  datetime.date(parse(birth_date)):
-        print("Error US02: Marriage date of "+curr_name+"("+curr_id+") occurs before their birth date.")
+        print("Error US02: Marriage date of "+curr_name+"("+curr_id+") occurs before their birth date on line "+lineNum+".")
         #returning for unit testing 
-        return str("Error US02: Marriage date of "+curr_name+"("+curr_id+") occurs before their birth date.")
+        return str("Error US02: Marriage date of "+curr_name+"("+curr_id+") occurs before their birth date on line "+lineNum+".")
     else:
         return
 #US03 birth before death of individual - mm
-def death_before_birth(death_date, birth_date, curr_name, curr_id):
+def death_before_birth(death_date, birth_date, curr_name, curr_id, lineNum):
     if datetime.date(parse(death_date)) < datetime.date(parse(birth_date)):
-        print("Error US03: Death date of "+curr_name+"("+curr_id+") occurs before their birth date.")
+        print("Error US03: Death date of "+curr_name+"("+curr_id+") occurs before their birth date on line "+lineNum+".")
         #returning for unit testing 
-        return "Error US03: Death date of "+curr_name+"("+curr_id+") occurs before their birth date."
+        return "Error US03: Death date of "+curr_name+"("+curr_id+") occurs before their birth date on line "+lineNum+"."
     else:
         return
 #US04 marriage before divorce of spouses - mm
-def divorce_before_marriage(div_date, marr_date, curr_name, curr_id):
+def divorce_before_marriage(div_date, marr_date, curr_name, curr_id, lineNum):
     if datetime.date(parse(div_date)) < datetime.date(parse(marr_date)):
-        print("Error US04: Divorce date of "+curr_name+"("+curr_id+") occurs before their marriage date.")
+        print("Error US04: Divorce date of "+curr_name+"("+curr_id+") occurs before their marriage date on line "+lineNum+".")
         #returning for unit testing 
-        return "Error US04: Divorce date of "+curr_name+"("+curr_id+") occurs before their marriage date."
+        return "Error US04: Divorce date of "+curr_name+"("+curr_id+") occurs before their marriage date on line "+lineNum+"."
     else:
         return
 #US07 Less than 150 years old
-def greater_than_150(curr_age,curr_name, curr_id):
+def greater_than_150(curr_age,curr_name, curr_id, lineNum):
     if int(curr_age) >= 150:
-        error_str = "Error US07: Age of " +curr_name+"("+curr_id+") is not less than 150."
+        error_str = "Error US07: Age of " +curr_name+"("+curr_id+") is not less than 150 on line "+lineNum+"."
         print(error_str)
         return error_str
     else:
@@ -88,20 +88,20 @@ def greater_than_150(curr_age,curr_name, curr_id):
 
 
 #US08 Birth before marriage of parents
-def birth_before_marriage(birth_date, marr_date, div_date, curr_name, curr_id, fam_id):
+def birth_before_marriage(birth_date, marr_date, div_date, curr_name, curr_id, fam_id, lineNum):
     if datetime.date(parse(birth_date)) < datetime.date(parse(marr_date)):
-        anom_str = "Anomaly US08: Birth date of " +curr_name+"("+curr_id+") occurs before the marriage date of their parents in Family " + fam_id + "."
+        anom_str = "Anomaly US08: Birth date of " +curr_name+"("+curr_id+") occurs before the marriage date of their parents in Family " + fam_id + " on line "+lineNum+"."
         print(anom_str)
         return anom_str
     elif div_date != "N/A" and datetime.date(parse(birth_date)) > (datetime.date(parse(div_date))+relativedelta(months=+9)):
-        anom_str = "Anomaly US08: Birth date of " +curr_name+"("+curr_id+") occurs 9 months after the divorce date of their parents in Family " + fam_id + "."
+        anom_str = "Anomaly US08: Birth date of " +curr_name+"("+curr_id+") occurs after 9 months from the divorce date of their parents in Family " + fam_id + " on line "+lineNum+"."
         print(anom_str)
         return anom_str
     else:
         return
     
 #parsing file
-for line in Lines:
+for count, line in enumerate(Lines):
     #initializing line variables
     split = line.split()
     level = split[0]
@@ -159,7 +159,7 @@ for line in Lines:
             person_list[person_count-1] ["Birthday"] = arguments
             person_list[person_count-1]["Age"] = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
             #us01
-            before_current_date(arguments, person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), "Birth")
+            before_current_date(arguments, person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), "Birth", str(count+1))
             birt_last = False
             continue
         if(tag == "DATE" and deat_next == True):
@@ -168,16 +168,16 @@ for line in Lines:
             death = parse(arguments)
             person_list[person_count-1]["Age"] = (death.year - born.year - ((death.month, death.day) < (born.month, born.day)))
             #us01
-            before_current_date(arguments, person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), "Death")
+            before_current_date(arguments, person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), "Death", str(count+1))
             deat_next = False
             #us03
             for p_dict in person_list:
                 if person_list[person_count-1]["Age"] < 0:
-                    death_before_birth(p_dict["Death"], p_dict["Birthday"], p_dict["Name"], p_dict["ID"].strip())
+                    death_before_birth(p_dict["Death"], p_dict["Birthday"], p_dict["Name"], p_dict["ID"].strip(), str(count+1))
             #us07
             for p_dict in person_list:
-                if person_list[person_count-1]["Age"] < 0:
-                    greater_than_150(p_dict["Age"], p_dict["Name"], p_dict["ID"].strip())
+                if person_list[person_count-1]["Age"] > 0:
+                    greater_than_150(p_dict["Age"], p_dict["Name"], p_dict["ID"].strip(), str(count+1))
             continue
         #up to death of individual
         if( tag == "FAMC" or tag == "FAMS"):
@@ -265,9 +265,9 @@ for line in Lines:
             #us02
             for p_dict in person_list:
                 if (p_dict["ID"] == family_list[family_count-1]["Husband ID"] or p_dict["ID"] == family_list[family_count-1]["Wife ID"]):
-                    marriage_before_birth(arguments, p_dict["Birthday"], p_dict["Name"], p_dict["ID"].strip())    
+                    marriage_before_birth(arguments, p_dict["Birthday"], p_dict["Name"], p_dict["ID"].strip(), str(count+1))    
             #us01
-            before_current_date(arguments, "Family", family_list[family_count-1]["ID"].strip(), "Marriage")
+            before_current_date(arguments, "Family", family_list[family_count-1]["ID"].strip(), "Marriage", str(count+1))
             marr_next = False
             div_next = True
             continue
@@ -281,19 +281,20 @@ for line in Lines:
         if(div_next == True and tag == "DATE"):
             family_list[family_count-1]["Divorced"] = arguments
             #us01
-            before_current_date(arguments, "Family", family_list[family_count-1]["ID"].strip(), "Divorce")
+            before_current_date(arguments, "Family", family_list[family_count-1]["ID"].strip(), "Divorce", str(count+1))
             div_next = False
             #us04
             for p_dict in person_list:
                 if (p_dict["ID"] == family_list[family_count-1]["Husband ID"] or p_dict["ID"] == family_list[family_count-1]["Wife ID"]):
-                    divorce_before_marriage(family_list[family_count-1]["Divorced"], family_list[family_count-1]["Married"], p_dict["Name"], p_dict["ID"].strip())
-            #US08
-            children_list_split = family_list[family_count-1]["Children"].split()
-            for child in children_list_split:
-                for p_dict in person_list:
-                    if p_dict["ID"].strip() == child:
-                        birth_before_marriage(p_dict["Birthday"], family_list[family_count-1]["Married"], family_list[family_count-1]["Divorced"], p_dict["Name"], p_dict["ID"].strip(), family_list[family_count-1]["ID"].strip())
+                    divorce_before_marriage(family_list[family_count-1]["Divorced"], family_list[family_count-1]["Married"], p_dict["Name"], p_dict["ID"].strip(), str(count+1))
             continue
+        #US08
+        children_list_split = family_list[family_count-1]["Children"].split()
+        for child in children_list_split:
+            for p_dict in person_list:
+                if p_dict["ID"].strip() == child:
+                    birth_before_marriage(p_dict["Birthday"], family_list[family_count-1]["Married"], family_list[family_count-1]["Divorced"], p_dict["Name"], p_dict["ID"].strip(), family_list[family_count-1]["ID"].strip(), str(count+1))
+            
 
 #adding individuals in the end
 for indiv_dict in person_list:
