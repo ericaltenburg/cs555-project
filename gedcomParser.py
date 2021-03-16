@@ -77,6 +77,22 @@ def divorce_before_marriage(div_date, marr_date, curr_name, curr_id, lineNum):
         return "Error US04: Divorce date of "+curr_name+"("+curr_id+") occurs before their marriage date on line "+lineNum+"."
     else:
         return
+#US05 Marriage should occur before death of either spouse - cs
+def death_before_marriage(death_date, marr_date, curr_name, curr_id, lineNum):
+    if datetime.date(parse(death_date)) < datetime.date(parse(marr_date)):
+        print("Error US05: Death date of " + curr_name + "(" + curr_id + ") occurs before their marriage date on line " + lineNum + ".")
+        #returning for unit testing 
+        return "Error US05: Death date of " + curr_name + "(" + curr_id + ") occurs before their marriage date on line " + lineNum + "."
+    else:
+        return
+#US06 Divorce can only occur before death of both spouses - cs
+def death_before_divorce(death_date, div_date, curr_name, curr_id, lineNum):
+    if datetime.date(parse(death_date)) < datetime.date(parse(div_date)):
+        print("Error US06: Death date of " + curr_name + "(" + curr_id + ") occurs before their divorce date on line " + lineNum + ".")
+        #returning for unit testing 
+        return "Error US06: Death date of " + curr_name + "(" + curr_id + ") occurs before their divorce date on line " + lineNum + "."
+    else:
+        return
 #US07 Less than 150 years old
 def greater_than_150(curr_age,curr_name, curr_id, lineNum):
     if int(curr_age) >= 150:
