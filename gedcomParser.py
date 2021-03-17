@@ -22,7 +22,7 @@ families = PrettyTable()
 families.field_names = ["ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children", "Married", "Divorced"]
 family_field_names = ["ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children", "Married", "Divorced"]
 
-f = open('family.ged', 'r')
+f = open('sprint1_family.ged', 'r')
 Lines = f.readlines()
 
 tags = ["INDI", "NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "FAM", "MARR",
@@ -93,6 +93,7 @@ def death_before_divorce(death_date, div_date, curr_name, curr_id, lineNum):
         return "Error US06: Death date of " + curr_name + "(" + curr_id + ") occurs before their divorce date on line " + lineNum + "."
     else:
         return
+    
 #US07 Less than 150 years old
 def greater_than_150(curr_age,curr_name, curr_id, lineNum):
     if int(curr_age) >= 150:
@@ -176,6 +177,8 @@ for count, line in enumerate(Lines):
             person_list[person_count-1]["Age"] = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
             #us01
             before_current_date(arguments, person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), "Birth", str(count+1))
+            #us07
+            greater_than_150(person_list[person_count-1]["Age"], person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), str(count+1))
             birt_last = False
             continue
         if(tag == "DATE" and deat_next == True):
@@ -188,13 +191,10 @@ for count, line in enumerate(Lines):
             deat_next = False
             #us03
             for p_dict in person_list:
-                if person_list[person_count-1]["Age"] < 0:
-                    death_before_birth(p_dict["Death"], p_dict["Birthday"], p_dict["Name"], p_dict["ID"].strip(), str(count+1))
-            #us07
-            for p_dict in person_list:
-                if person_list[person_count-1]["Age"] > 0:
-                    greater_than_150(p_dict["Age"], p_dict["Name"], p_dict["ID"].strip(), str(count+1))
-            continue
+                if p_dict["Age"] < 0:
+                    #fixing n/a bug. 3.16
+                    if(p_dict["Death"] != "N/A"):
+                        death_before_birth(p_dict["Death"], p_dict["Birthday"], p_dict["Name"], p_dict["ID"].strip(), str(count+1))
         #up to death of individual
         if( tag == "FAMC" or tag == "FAMS"):
             if(deat_next == True):
@@ -303,6 +303,10 @@ for count, line in enumerate(Lines):
             for p_dict in person_list:
                 if (p_dict["ID"] == family_list[family_count-1]["Husband ID"] or p_dict["ID"] == family_list[family_count-1]["Wife ID"]):
                     divorce_before_marriage(family_list[family_count-1]["Divorced"], family_list[family_count-1]["Married"], p_dict["Name"], p_dict["ID"].strip(), str(count+1))
+                    #us05
+                    death_before_marriage(p_dict["Death"], family_list[family_count-1]["Married"], p_dict["Name"], p_dict["ID"].strip(), str(count+1))
+                    #us06
+                    death_before_divorce(p_dict["Death"], family_list[family_count-1]["Married"], p_dict["Name"], p_dict["ID"].strip(), str(count+1))
             continue
         #US08
         children_list_split = family_list[family_count-1]["Children"].split()
