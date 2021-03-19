@@ -22,7 +22,7 @@ families = PrettyTable()
 families.field_names = ["ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children", "Married", "Divorced"]
 family_field_names = ["ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children", "Married", "Divorced"]
 
-f = open('sprint1_family.ged', 'r')
+f = open('family.ged', 'r')
 Lines = f.readlines()
 
 tags = ["INDI", "NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "FAM", "MARR",
@@ -103,7 +103,6 @@ def greater_than_150(curr_age,curr_name, curr_id, lineNum):
     else:
         return
 
-
 #US08 Birth before marriage of parents
 def birth_before_marriage(birth_date, marr_date, div_date, curr_name, curr_id, fam_id, lineNum):
     if datetime.date(parse(birth_date)) < datetime.date(parse(marr_date)):
@@ -113,6 +112,28 @@ def birth_before_marriage(birth_date, marr_date, div_date, curr_name, curr_id, f
     elif div_date != "N/A" and datetime.date(parse(birth_date)) > (datetime.date(parse(div_date))+relativedelta(months=+9)):
         anom_str = "Anomaly US08: Birth date of " +curr_name+"("+curr_id+") occurs after 9 months from the divorce date of their parents in Family " + fam_id + " on line "+lineNum+"."
         print(anom_str)
+        return anom_str
+    else:
+        return
+
+#US11 No Bigamy
+def no_bigamy(marr_date1, marr_date2, div_date1, curr_name, curr_id, lineNum):
+    if datetime.date(parse(marr_date2)) < datetime.date(parse(marr_date2)):
+        anom_str = "Anomaly US11: Marriage of " +curr_name+"("+curr_id+") occurred during another marriage on line "+lineNum+" (there is bigamy)."
+        print(anom_str)
+        return anom_str
+    else:
+        return
+
+#US12 Parent not too old
+def parent_too_old(cbirth, pbirth, p_name, curr_id, gender, lineNum):
+    time = datetime.date(parse(cbirth)) - datetime.date(parse(pbirth))
+    yearsDifference = time.total_seconds()/31557600
+    if gender == 'F' and yearsDifference > 60:
+        anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a mother who is more than 60 years older than her child on line "+lineNum+"."
+        return anom_str
+    elif gender == 'M' and yearsDifference > 80:
+        anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a father who is more than 80 years older than his child on line "+lineNum+"."
         return anom_str
     else:
         return
@@ -314,7 +335,20 @@ for count, line in enumerate(Lines):
             for p_dict in person_list:
                 if p_dict["ID"].strip() == child:
                     birth_before_marriage(p_dict["Birthday"], family_list[family_count-1]["Married"], family_list[family_count-1]["Divorced"], p_dict["Name"], p_dict["ID"].strip(), family_list[family_count-1]["ID"].strip(), str(count+1))
-            
+        #US11
+        #husbands = []
+        #for f_dict in family_list:  
+        #    husbands.append(f_dict["Husband ID"])
+        #husb = husbands.pop()
+        #print(husb)
+
+        #US12
+        #children_list_split = family_list[family_count-1]["Children"].split()
+        #for child in children_list_split:
+        #    for p_dict in person_list:
+        #        if p_dict["ID"].strip() == child:
+        #            birth_before_marriage(p_dict["Birthday"], family_list[family_count-1]["Married"], family_list[family_count-1]["Divorced"], p_dict["Name"], p_dict["ID"].strip(), family_list[family_count-1]["ID"].strip(), str(count+1))
+        
 
 #adding individuals in the end
 for indiv_dict in person_list:
