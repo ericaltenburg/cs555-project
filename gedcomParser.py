@@ -119,7 +119,11 @@ def birth_before_marriage(birth_date, marr_date, div_date, curr_name, curr_id, f
 
 #US11 No Bigamy
 def no_bigamy(marr_date1, marr_date2, div_date1, curr_name, curr_id, lineNum):
-    if datetime.date(parse(marr_date2)) < datetime.date(parse(div_date1)):
+    if div_date1 == 'N/A' and datetime.date(parse(marr_date1)) < datetime.date(parse(marr_date2)): # 1st marriage and 2nd marriage going on at same time
+        anom_str = "Anomaly US11: Marriage of " +curr_name+"("+curr_id+") occurred during another marriage on line "+lineNum+" (there is bigamy)."
+        print(anom_str)
+        return anom_str
+    elif datetime.date(parse(marr_date2)) < datetime.date(parse(div_date1)): # 2nd marriage happened before the 1st marriage's divorce
         anom_str = "Anomaly US11: Marriage of " +curr_name+"("+curr_id+") occurred during another marriage on line "+lineNum+" (there is bigamy)."
         print(anom_str)
         return anom_str
@@ -129,12 +133,12 @@ def no_bigamy(marr_date1, marr_date2, div_date1, curr_name, curr_id, lineNum):
 #US12 Parent not too old
 def parent_too_old(cbirth, pbirth, p_name, curr_id, gender, lineNum):
     time = datetime.date(parse(cbirth)) - datetime.date(parse(pbirth))
-    yearsDifference = time.total_seconds()/31557600
+    yearsDifference = math.floor(time.total_seconds()/31536000) #seconds in a year = 365 days
     if gender == 'F' and yearsDifference > 60:
-        anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a mother who is "+str(math.floor(yearsDifference))+" (more than 60) years older than her child on line "+lineNum+"."
+        anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a mother who is "+str(yearsDifference)+" (more than 60) years older than her child on line "+lineNum+"."
         return anom_str
     elif gender == 'M' and yearsDifference > 80:
-        anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a father who is "+str(math.floor(yearsDifference))+" (more than 80) years older than his child on line "+lineNum+"."
+        anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a father who is "+str(yearsDifference)+" (more than 80) years older than his child on line "+lineNum+"."
         return anom_str
     else:
         return
@@ -337,18 +341,25 @@ for count, line in enumerate(Lines):
                 if p_dict["ID"].strip() == child:
                     birth_before_marriage(p_dict["Birthday"], family_list[family_count-1]["Married"], family_list[family_count-1]["Divorced"], p_dict["Name"], p_dict["ID"].strip(), family_list[family_count-1]["ID"].strip(), str(count+1))
         #US11
-        #husbands = []
-        #for f_dict in family_list:  
-        #    husbands.append(f_dict["Husband ID"])
-        #husb = husbands.pop()
-        #print(husb)
 
-        #US12
-        #children_list_split = family_list[family_count-1]["Children"].split()
-        #for child in children_list_split:
-        #    for p_dict in person_list:
-        #        if p_dict["ID"].strip() == child:
-        #            birth_before_marriage(p_dict["Birthday"], family_list[family_count-1]["Married"], family_list[family_count-1]["Divorced"], p_dict["Name"], p_dict["ID"].strip(), family_list[family_count-1]["ID"].strip(), str(count+1))
+        # #US12
+        # husband = family_list[family_count-1]["Husband ID"]
+        # children = family_list[family_count-1]["Children"].split()
+        # for c in children:
+        #     childName = ""
+        #     husbName = ""
+        #     cbirth = ""
+        #     pbirth = ""
+        #     for p_dict in person_list:
+        #         if p_dict["ID"].strip() == c:
+        #             childName = p_dict["Name"]
+        #             cbirth = p_dict["Birthday"]
+        #             print(childName)
+        #             print(cbirth)
+        #         if p_dict["ID"].strip() == husband:
+        #             husbName = p_dict["Name"]
+        #             pbirth = p_dict["Birthday"]
+        #     parent_too_old(cbirth, pbirth, husbName, husband, "M", str(count+1)) GIVES ERROR ON STRING NOT BEING ABLE TO BE PARSED
         
 
 #adding individuals in the end
