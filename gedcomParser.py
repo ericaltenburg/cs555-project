@@ -5,6 +5,7 @@ from datetime import *
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 from pymongo import MongoClient
+import math
 import os
 from dotenv import load_dotenv
 
@@ -118,7 +119,7 @@ def birth_before_marriage(birth_date, marr_date, div_date, curr_name, curr_id, f
 
 #US11 No Bigamy
 def no_bigamy(marr_date1, marr_date2, div_date1, curr_name, curr_id, lineNum):
-    if datetime.date(parse(marr_date2)) < datetime.date(parse(marr_date2)):
+    if datetime.date(parse(marr_date2)) < datetime.date(parse(div_date1)):
         anom_str = "Anomaly US11: Marriage of " +curr_name+"("+curr_id+") occurred during another marriage on line "+lineNum+" (there is bigamy)."
         print(anom_str)
         return anom_str
@@ -130,10 +131,10 @@ def parent_too_old(cbirth, pbirth, p_name, curr_id, gender, lineNum):
     time = datetime.date(parse(cbirth)) - datetime.date(parse(pbirth))
     yearsDifference = time.total_seconds()/31557600
     if gender == 'F' and yearsDifference > 60:
-        anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a mother who is more than 60 years older than her child on line "+lineNum+"."
+        anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a mother who is "+str(math.floor(yearsDifference))+" (more than 60) years older than her child on line "+lineNum+"."
         return anom_str
     elif gender == 'M' and yearsDifference > 80:
-        anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a father who is more than 80 years older than his child on line "+lineNum+"."
+        anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a father who is "+str(math.floor(yearsDifference))+" (more than 80) years older than his child on line "+lineNum+"."
         return anom_str
     else:
         return
