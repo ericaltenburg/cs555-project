@@ -154,6 +154,14 @@ def more_than_15_siblings(sib_count, fam_id, lineNum):
         return error_str
     else:
         return
+#US16 Males in family must have same name as father
+def different_last_names(father_name, p_name, curr_id, lineNum):
+    if (father_name != p_name):
+        error_str = "Error US16: "+p_name+" ("+curr_id+") does not have the same name as their father ("+father_name+") on line "+lineNum+"."
+        print(error_str)
+        return error_str
+    else:
+        return
     
 #parsing file
 for count, line in enumerate(Lines):
@@ -264,6 +272,7 @@ for count, line in enumerate(Lines):
 
         if (family_list[family_count-1]["Children"].split()[0] != old_children_list[0]):
             more_than_15_siblings(len(old_children_list), family_list[family_count-1]["ID"].strip(), str(count+1))
+
             old_children_list = family_list[family_count-1]["Children"].split()
         else:
             old_children_list = family_list[family_count-1]["Children"].split()
@@ -320,6 +329,12 @@ for count, line in enumerate(Lines):
 ##                    p_dict["Child"] = family_list[family_count-1]["Children"]
 ##                if (p_dict["ID"] == family_list[family_count-1]["Wife ID"]):
 ##                    p_dict["Child"] = family_list[family_count-1]["Children"]
+            #US16
+            for p_dict in person_list:
+                if (p_dict["ID"] == arguments and p_dict["Gender"] == "M "):
+                    father_name = family_list[family_count-1]["Husband Name"].split()[1][1:-1]
+                    indiv_name = p_dict["Name"].split()[1][1:-1]
+                    different_last_names(father_name, indiv_name, p_dict["ID"].strip(), str(count+1))
             continue
         #married and divorced check
         #wait for date arguments

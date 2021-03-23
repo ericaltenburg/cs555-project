@@ -43,5 +43,7 @@ class TestGedcome(unittest.TestCase):
                         "Anomaly US12: Jacob(I12) is a father who is 81 (more than 80) years older than his child on line 17.")
     def test_more_than_15_siblings(self):
         self.assertEqual(more_than_15_siblings(16, "F06", "128"), "Error US15: Family (F06) has more than 15 siblings on line 128.")
+    def test_different_last_names(self):
+        self.assertEqual(different_last_names("Altenburg", "Chasnov", "I09", "128"), "Error US16: Chasnov (I09) does not have the same name as their father (Altenburg) on line 128.")
 if __name__ == '__main__':
     unittest.main()
