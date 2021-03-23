@@ -45,6 +45,9 @@ husb_next = False
 wife_next = False
 chil_next = False
 fams_last = False
+#US15
+old_children_list = []
+
 
 #US01 date before current date method - sw
 def before_current_date(date_args, curr_name, curr_id, prev_tag, lineNum):
@@ -140,6 +143,15 @@ def parent_too_old(cbirth, pbirth, p_name, curr_id, gender, lineNum):
     elif gender == 'M' and yearsDifference > 80:
         anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a father who is "+str(yearsDifference)+" (more than 80) years older than his child on line "+lineNum+"."
         return anom_str
+    else:
+        return
+
+#US15 Fewer than 15 siblings in a family (max of 15 children)
+def more_than_15_siblings(sib_count, fam_id, lineNum):
+    if (sib_count > 15):
+        error_str = "Error US15: Family (" +fam_id+ ") has more than 15 siblings on line "+lineNum+"."
+        print(error_str)
+        return error_str
     else:
         return
     
@@ -242,6 +254,21 @@ for count, line in enumerate(Lines):
             #finish individual
             indi_hit = False
             continue
+
+    #US15
+    if (family_count > 0 and "Children" in family_list[family_count-1]):
+        if (tag == "TRLR"):
+            more_than_15_siblings(len(old_children_list), family_list[family_count-1]["ID"].strip(), str(count+1))
+        if (len(old_children_list) == 0):
+            old_children_list = family_list[family_count-1]["Children"].split()
+
+        if (family_list[family_count-1]["Children"].split()[0] != old_children_list[0]):
+            more_than_15_siblings(len(old_children_list), family_list[family_count-1]["ID"].strip(), str(count+1))
+            old_children_list = family_list[family_count-1]["Children"].split()
+        else:
+            old_children_list = family_list[family_count-1]["Children"].split()
+
+    
 
     #Child and Spouse Check & Family Table build
     #((tag == "TYPE" and arguments == "Ending") or (tag == "TRLR"))
@@ -360,7 +387,9 @@ for count, line in enumerate(Lines):
         #             husbName = p_dict["Name"]
         #             pbirth = p_dict["Birthday"]
         #     parent_too_old(cbirth, pbirth, husbName, husband, "M", str(count+1)) GIVES ERROR ON STRING NOT BEING ABLE TO BE PARSED
-        
+
+
+
 
 #adding individuals in the end
 for indiv_dict in person_list:
