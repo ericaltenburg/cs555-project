@@ -2,6 +2,7 @@
 
 from prettytable import PrettyTable
 from datetime import *
+import dateutil
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 from pymongo import MongoClient
@@ -23,7 +24,7 @@ families = PrettyTable()
 families.field_names = ["ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children", "Married", "Divorced"]
 family_field_names = ["ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children", "Married", "Divorced"]
 
-f = open('family.ged', 'r')
+f = open('family2.ged', 'r')
 Lines = f.readlines()
 
 tags = ["INDI", "NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "FAM", "MARR",
@@ -57,6 +58,7 @@ def before_current_date(date_args, curr_name, curr_id, prev_tag, lineNum):
         return str("Error US01: "+prev_tag+" date of "+curr_name+"("+curr_id+") occurs before the current date on line "+lineNum+".")
     else:
         return
+    
 #US02 birth of individual before marriage of individual
 def marriage_before_birth(marr_date, birth_date, curr_name, curr_id, lineNum):
     if datetime.date(parse(marr_date)) <  datetime.date(parse(birth_date)):
@@ -65,6 +67,7 @@ def marriage_before_birth(marr_date, birth_date, curr_name, curr_id, lineNum):
         return str("Error US02: Marriage date of "+curr_name+"("+curr_id+") occurs before their birth date on line "+lineNum+".")
     else:
         return
+    
 #US03 birth before death of individual - mm
 def death_before_birth(death_date, birth_date, curr_name, curr_id, lineNum):
     if datetime.date(parse(death_date)) < datetime.date(parse(birth_date)):
@@ -73,6 +76,7 @@ def death_before_birth(death_date, birth_date, curr_name, curr_id, lineNum):
         return "Error US03: Death date of "+curr_name+"("+curr_id+") occurs before their birth date on line "+lineNum+"."
     else:
         return
+    
 #US04 marriage before divorce of spouses - mm
 def divorce_before_marriage(div_date, marr_date, curr_name, curr_id, lineNum):
     if datetime.date(parse(div_date)) < datetime.date(parse(marr_date)):
@@ -81,6 +85,7 @@ def divorce_before_marriage(div_date, marr_date, curr_name, curr_id, lineNum):
         return "Error US04: Divorce date of "+curr_name+"("+curr_id+") occurs before their marriage date on line "+lineNum+"."
     else:
         return
+    
 #US05 Marriage should occur before death of either spouse - cs
 def death_before_marriage(death_date, marr_date, curr_name, curr_id, lineNum):
     if datetime.date(parse(death_date)) < datetime.date(parse(marr_date)):
@@ -89,6 +94,7 @@ def death_before_marriage(death_date, marr_date, curr_name, curr_id, lineNum):
         return "Error US05: Death date of " + curr_name + "(" + curr_id + ") occurs before their marriage date on line " + lineNum + "."
     else:
         return
+    
 #US06 Divorce can only occur before death of both spouses - cs
 def death_before_divorce(death_date, div_date, curr_name, curr_id, lineNum):
     if datetime.date(parse(death_date)) < datetime.date(parse(div_date)):
@@ -119,7 +125,31 @@ def birth_before_marriage(birth_date, marr_date, div_date, curr_name, curr_id, f
         return anom_str
     else:
         return
+    
+#US09 Birth before death of parents
+def birth_before_parents_death(child_birth_date, child_name, child_id, parent_death, is_mother, lineNum):
+    if is_mother:
+        if datetime.date(parse(child_birth_date)) > datetime.date(parse(parent_death)):
+            error_str = "Error US09: Birth of " +child_name+"("+child_id+") is after the death of their mother on line "+lineNum+"."
+            print(error_str)
+            return error_str
+    else:
+        nine_month = dateutil.relativedelta.relativedelta(months=9)
+        if datetime.date(parse(child_birth_date)) > datetime.date(parse(parent_death)-nine_month):
+            error_str = "Error US09: Birth of " +child_name+"("+child_id+") is after 9 months after the death of their father on line "+lineNum+"."
+            print(error_str)
+            return error_str
+    return;
 
+#US10 Marriage after 14
+def marriage_after_14(curr_id, curr_name, marr_date, birt_date, lineNum):
+    time = datetime.date(parse(marr_date)) - datetime.date(parse(birt_date))
+    yearsDifference = math.floor(time.total_seconds()/31536000)
+    if yearsDifference < 14:
+        error_str = "Error US10: Birth of " +curr_name+"("+curr_id+") is less than 14 years before their marriage date on line "+lineNum+"."
+        print(error_str)
+        return error_str
+    
 #US11 No Bigamy
 def no_bigamy(marr_date1, marr_date2, div_date1, curr_name, curr_id, lineNum):
     if div_date1 == 'N/A' and datetime.date(parse(marr_date1)) < datetime.date(parse(marr_date2)): # 1st marriage and 2nd marriage going on at same time
@@ -154,6 +184,7 @@ def more_than_15_siblings(sib_count, fam_id, lineNum):
         return error_str
     else:
         return
+    
 #US16 Males in family must have same name as father
 def different_last_names(father_name, p_name, curr_id, lineNum):
     if (father_name != p_name):
@@ -162,6 +193,7 @@ def different_last_names(father_name, p_name, curr_id, lineNum):
         return error_str
     else:
         return
+
     
 #parsing file
 for count, line in enumerate(Lines):
@@ -280,7 +312,6 @@ for count, line in enumerate(Lines):
     
 
     #Child and Spouse Check & Family Table build
-    #((tag == "TYPE" and arguments == "Ending") or (tag == "TRLR"))
     if(indi_hit == False and person_list):
         #adding new family row
         if(tag == "FAM"):
@@ -323,12 +354,7 @@ for count, line in enumerate(Lines):
                 (family_list[family_count-1]["Children"]) += (arguments)
             else:
                 family_list[family_count-1]["Children"] = arguments
-            #adds children to person list
-##            for p_dict in person_list:
-##                if (p_dict["ID"] == family_list[family_count-1]["Husband ID"]):
-##                    p_dict["Child"] = family_list[family_count-1]["Children"]
-##                if (p_dict["ID"] == family_list[family_count-1]["Wife ID"]):
-##                    p_dict["Child"] = family_list[family_count-1]["Children"]
+           
             #US16
             for p_dict in person_list:
                 if (p_dict["ID"] == arguments and p_dict["Gender"] == "M "):
@@ -349,7 +375,9 @@ for count, line in enumerate(Lines):
             #us02
             for p_dict in person_list:
                 if (p_dict["ID"] == family_list[family_count-1]["Husband ID"] or p_dict["ID"] == family_list[family_count-1]["Wife ID"]):
-                    marriage_before_birth(arguments, p_dict["Birthday"], p_dict["Name"], p_dict["ID"].strip(), str(count+1))    
+                    marriage_before_birth(arguments, p_dict["Birthday"], p_dict["Name"], p_dict["ID"].strip(), str(count+1))
+                    #us10
+                    marriage_after_14(p_dict["ID"].strip(), p_dict["Name"], arguments, p_dict["Birthday"], str(count+1))
             #us01
             before_current_date(arguments, "Family", family_list[family_count-1]["ID"].strip(), "Marriage", str(count+1))
             marr_next = False
@@ -376,12 +404,27 @@ for count, line in enumerate(Lines):
                     #us06
                     death_before_divorce(p_dict["Death"], family_list[family_count-1]["Married"], p_dict["Name"], p_dict["ID"].strip(), str(count+1))
             continue
+        #us09
+        wife_death = "N/A"
+        husb_death = "N/A"
+        for p_dict in person_list:
+            if p_dict["ID"].strip() == family_list[family_count-1]["Wife ID"].strip():
+                wife_death = p_dict["Death"]
+            elif p_dict["ID"].strip() == family_list[family_count-1]["Husband ID"].strip():
+                husb_death = p_dict["Death"]
         #US08
         children_list_split = family_list[family_count-1]["Children"].split()
         for child in children_list_split:
             for p_dict in person_list:
                 if p_dict["ID"].strip() == child:
                     birth_before_marriage(p_dict["Birthday"], family_list[family_count-1]["Married"], family_list[family_count-1]["Divorced"], p_dict["Name"], p_dict["ID"].strip(), family_list[family_count-1]["ID"].strip(), str(count+1))
+                    #US09
+                    if(wife_death != "N/A"):
+                        birth_before_parents_death(p_dict["Birthday"], p_dict["Name"], p_dict["ID"].strip(), wife_death, True, str(count+1))
+                    if(husb_death != "N/A"):
+                        birth_before_parents_death(p_dict["Birthday"], p_dict["Name"], p_dict["ID"].strip(), husb_death, False, str(count+1))
+
+
         #US11
 
         # #US12

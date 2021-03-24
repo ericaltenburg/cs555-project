@@ -45,5 +45,13 @@ class TestGedcome(unittest.TestCase):
         self.assertEqual(more_than_15_siblings(16, "F06", "128"), "Error US15: Family (F06) has more than 15 siblings on line 128.")
     def test_different_last_names(self):
         self.assertEqual(different_last_names("Altenburg", "Chasnov", "I09", "128"), "Error US16: Chasnov (I09) does not have the same name as their father (Altenburg) on line 128.")
+    def test_birth_before_parents_death_mother(self):
+        self.assertEqual(birth_before_parents_death("02-02-2000", "Suzy Smith", "I02", "01-01-2000", True, "128"), "Error US09: Birth of Suzy Smith(I02) is after the death of their mother on line 128.")
+    def test_birth_before_parents_death_father(self):
+        self.assertEqual(birth_before_parents_death("11-11-2000", "Suzy Smith", "I02", "01-01-2000", False, "128"), "Error US09: Birth of Suzy Smith(I02) is after 9 months after the death of their father on line 128.")
+    def test_marriage_after_14(self):
+        self.assertEqual(marriage_after_14("I02", "Suzy Smith", "01-01-2005", "02-02-2000", "128"),
+                         "Error US10: Birth of Suzy Smith(I02) is less than 14 years before their marriage date on line 128.")
+        
 if __name__ == '__main__':
     unittest.main()
