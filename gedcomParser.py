@@ -24,7 +24,7 @@ families = PrettyTable()
 families.field_names = ["ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children", "Married", "Divorced"]
 family_field_names = ["ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children", "Married", "Divorced"]
 
-f = open('family2.ged', 'r')
+f = open('family.ged', 'r')
 Lines = f.readlines()
 
 tags = ["INDI", "NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "FAM", "MARR",
@@ -179,7 +179,7 @@ def parent_too_old(cbirth, pbirth, p_name, curr_id, gender, lineNum):
 #US15 Fewer than 15 siblings in a family (max of 15 children)
 def more_than_15_siblings(sib_count, fam_id, lineNum):
     if (sib_count > 15):
-        error_str = "Error US15: Family (" +fam_id+ ") has more than 15 siblings on line "+lineNum+"."
+        error_str = "Anomaly US15: Family (" +fam_id+ ") has more than 15 siblings on line "+lineNum+"."
         print(error_str)
         return error_str
     else:
@@ -188,7 +188,7 @@ def more_than_15_siblings(sib_count, fam_id, lineNum):
 #US16 Males in family must have same name as father
 def different_last_names(father_name, p_name, curr_id, lineNum):
     if (father_name != p_name):
-        error_str = "Error US16: "+p_name+" ("+curr_id+") does not have the same name as their father ("+father_name+") on line "+lineNum+"."
+        error_str = "Anomaly US16: "+p_name+" ("+curr_id+") does not have the same name as their father ("+father_name+") on line "+lineNum+"."
         print(error_str)
         return error_str
     else:

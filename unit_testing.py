@@ -42,9 +42,9 @@ class TestGedcome(unittest.TestCase):
         self.assertEqual(parent_too_old("02-02-2000", "01-01-1919", "Jacob", "I12", "M", "17"), 
                         "Anomaly US12: Jacob(I12) is a father who is 81 (more than 80) years older than his child on line 17.")
     def test_more_than_15_siblings(self):
-        self.assertEqual(more_than_15_siblings(16, "F06", "128"), "Error US15: Family (F06) has more than 15 siblings on line 128.")
+        self.assertEqual(more_than_15_siblings(16, "F06", "128"), "Anomaly US15: Family (F06) has more than 15 siblings on line 128.")
     def test_different_last_names(self):
-        self.assertEqual(different_last_names("Altenburg", "Chasnov", "I09", "128"), "Error US16: Chasnov (I09) does not have the same name as their father (Altenburg) on line 128.")
+        self.assertEqual(different_last_names("Altenburg", "Chasnov", "I09", "128"), "Anomaly US16: Chasnov (I09) does not have the same name as their father (Altenburg) on line 128.")
     def test_birth_before_parents_death_mother(self):
         self.assertEqual(birth_before_parents_death("02-02-2000", "Suzy Smith", "I02", "01-01-2000", True, "128"), "Error US09: Birth of Suzy Smith(I02) is after the death of their mother on line 128.")
     def test_birth_before_parents_death_father(self):
