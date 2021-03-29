@@ -152,20 +152,20 @@ def marriage_after_14(curr_id, curr_name, marr_date, birt_date, lineNum):
     
 #US11 No Bigamy
 def no_bigamy(marr_date1, marr_date2, div_date1, curr_name, curr_id, lineNum):
-    if marr_date2 == 'N/A': # family can have child with no marriage date
+    if marr_date2 == 'N/A' or marr_date1 == 'N/A': # family can have child with no marriage date
         return
     if div_date1 == 'N/A': # 1st marriage and 2nd marriage going on at same time, no divorce happened
         if datetime.date(parse(marr_date1)) < datetime.date(parse(marr_date2)): 
-            anom_str = "Anomaly US11: Marriage of " +curr_name+"("+curr_id+") occurred during another marriage (there is bigamy) on line "+lineNum+"."
+            anom_str = "Anomaly US11: Marriage of " +curr_name+"("+curr_id+") occurred during another marriage (there is bigamy) on Families table line "+lineNum+"."
             print(anom_str)
             return anom_str
         if datetime.date(parse(marr_date1)) > datetime.date(parse(marr_date2)): 
-            anom_str = "Anomaly US11: Marriage of " +curr_name+"("+curr_id+") occurred during another marriage (there is bigamy) on line "+lineNum+"."
+            anom_str = "Anomaly US11: Marriage of " +curr_name+"("+curr_id+") occurred during another marriage (there is bigamy) on Families table line "+lineNum+"."
             print(anom_str)
             return anom_str
     if div_date1 != "N/A": # 2nd marriage happened before the 1st marriage's divorce
         if datetime.date(parse(marr_date2)) < datetime.date(parse(div_date1)): 
-            anom_str = "Anomaly US11: Marriage of " +curr_name+"("+curr_id+") occurred during another marriage (there is bigamy) on line "+lineNum+"."
+            anom_str = "Anomaly US11: Marriage of " +curr_name+"("+curr_id+") occurred during another marriage (there is bigamy) on Families table line "+lineNum+"."
             print(anom_str)
             return anom_str
     return
@@ -469,9 +469,9 @@ for count, person in enumerate(family_list):
     if count == 0:
         continue
     if person["Husband ID"] in bigamy_dict:
-        no_bigamy(bigamy_dict[person["Husband ID"]][0], person["Married"], bigamy_dict[person["Husband ID"]][1], person["Husband Name"], person["ID"], str(count))
+        no_bigamy(bigamy_dict[person["Husband ID"]][0], person["Married"], bigamy_dict[person["Husband ID"]][1], person["Husband Name"], person["ID"], str(count+1))
     if person["Wife ID"] in bigamy_dict:
-        no_bigamy(bigamy_dict[person["Wife ID"]][0], person["Married"], bigamy_dict[person["Wife ID"]][1], person["Wife Name"], person["ID"], str(count))    
+        no_bigamy(bigamy_dict[person["Wife ID"]][0], person["Married"], bigamy_dict[person["Wife ID"]][1], person["Wife Name"], person["ID"], str(count+1))    
 
 #adding individuals in the end
 for indiv_dict in person_list:
