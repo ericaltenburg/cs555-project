@@ -31,10 +31,10 @@ class TestGedcome(unittest.TestCase):
         self.assertEqual(birth_before_marriage("01-01-1999", "01-01-1990", "01-01-1998", "Jim Beam", "I03", "F04", "7"), "Anomaly US08: Birth date of Jim Beam(I03) occurs after 9 months from the divorce date of their parents in Family F04 on line 7.")
     def test_no_bigamy1(self):
         self.assertEqual(no_bigamy("01-01-1990", "01-01-1999", "01-01-2000", "Steel", "I11", "16"), 
-                        "Anomaly US11: Marriage of Steel(I11) occurred during another marriage on line 16 (there is bigamy).")
+                        "Anomaly US11: Marriage of Steel(I11) occurred during another marriage (there is bigamy) on line 16.")
     def test_no_bigamy2(self):
         self.assertEqual(no_bigamy("01-01-1990", "01-01-1999", "N/A", "Manny", "I18", "19"), 
-                        "Anomaly US11: Marriage of Manny(I18) occurred during another marriage on line 19 (there is bigamy).")
+                        "Anomaly US11: Marriage of Manny(I18) occurred during another marriage (there is bigamy) on line 19.")
     def test_parent_too_old1(self):
         self.assertEqual(parent_too_old("01-02-2000", "01-01-1900", "Jackie", "I12", "F", "17"), 
                         "Anomaly US12: Jackie(I12) is a mother who is 100 (more than 60) years older than her child on line 17.")

@@ -152,26 +152,35 @@ def marriage_after_14(curr_id, curr_name, marr_date, birt_date, lineNum):
     
 #US11 No Bigamy
 def no_bigamy(marr_date1, marr_date2, div_date1, curr_name, curr_id, lineNum):
-    if div_date1 == 'N/A' and datetime.date(parse(marr_date1)) < datetime.date(parse(marr_date2)): # 1st marriage and 2nd marriage going on at same time
-        anom_str = "Anomaly US11: Marriage of " +curr_name+"("+curr_id+") occurred during another marriage on line "+lineNum+" (there is bigamy)."
-        print(anom_str)
-        return anom_str
-    elif datetime.date(parse(marr_date2)) < datetime.date(parse(div_date1)): # 2nd marriage happened before the 1st marriage's divorce
-        anom_str = "Anomaly US11: Marriage of " +curr_name+"("+curr_id+") occurred during another marriage on line "+lineNum+" (there is bigamy)."
-        print(anom_str)
-        return anom_str
-    else:
+    if marr_date2 == 'N/A': # family can have child with no marriage date
         return
+    if div_date1 == 'N/A': # 1st marriage and 2nd marriage going on at same time, no divorce happened
+        if datetime.date(parse(marr_date1)) < datetime.date(parse(marr_date2)): 
+            anom_str = "Anomaly US11: Marriage of " +curr_name+"("+curr_id+") occurred during another marriage (there is bigamy) on line "+lineNum+"."
+            print(anom_str)
+            return anom_str
+        if datetime.date(parse(marr_date1)) > datetime.date(parse(marr_date2)): 
+            anom_str = "Anomaly US11: Marriage of " +curr_name+"("+curr_id+") occurred during another marriage (there is bigamy) on line "+lineNum+"."
+            print(anom_str)
+            return anom_str
+    if div_date1 != "N/A": # 2nd marriage happened before the 1st marriage's divorce
+        if datetime.date(parse(marr_date2)) < datetime.date(parse(div_date1)): 
+            anom_str = "Anomaly US11: Marriage of " +curr_name+"("+curr_id+") occurred during another marriage (there is bigamy) on line "+lineNum+"."
+            print(anom_str)
+            return anom_str
+    return
 
 #US12 Parent not too old
 def parent_too_old(cbirth, pbirth, p_name, curr_id, gender, lineNum):
     time = datetime.date(parse(cbirth)) - datetime.date(parse(pbirth))
-    yearsDifference = math.floor(time.total_seconds()/31536000) #seconds in a year = 365 days
+    yearsDifference = math.floor(time.total_seconds()/31536000)
     if gender == 'F' and yearsDifference > 60:
         anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a mother who is "+str(yearsDifference)+" (more than 60) years older than her child on line "+lineNum+"."
+        print(anom_str)
         return anom_str
     elif gender == 'M' and yearsDifference > 80:
         anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a father who is "+str(yearsDifference)+" (more than 80) years older than his child on line "+lineNum+"."
+        print(anom_str)
         return anom_str
     else:
         return
@@ -193,7 +202,6 @@ def different_last_names(father_name, p_name, curr_id, lineNum):
         return error_str
     else:
         return
-
     
 #parsing file
 for count, line in enumerate(Lines):
@@ -309,8 +317,6 @@ for count, line in enumerate(Lines):
         else:
             old_children_list = family_list[family_count-1]["Children"].split()
 
-    
-
     #Child and Spouse Check & Family Table build
     if(indi_hit == False and person_list):
         #adding new family row
@@ -407,11 +413,23 @@ for count, line in enumerate(Lines):
         #us09
         wife_death = "N/A"
         husb_death = "N/A"
+        wifeBirth = "N/A"
+        husbBirth = "N/A"
+        wifeId = "N/A"
+        husbId = "N/A"
+        wifeName = ""
+        husbName = ""
         for p_dict in person_list:
             if p_dict["ID"].strip() == family_list[family_count-1]["Wife ID"].strip():
+                wifeId = p_dict["ID"].strip()
+                wifeBirth = p_dict["Birthday"].strip()
                 wife_death = p_dict["Death"]
+                wifeName = p_dict["Name"].strip()
             elif p_dict["ID"].strip() == family_list[family_count-1]["Husband ID"].strip():
                 husb_death = p_dict["Death"]
+                husbId = p_dict["ID"].strip()
+                husbBirth = p_dict["Birthday"].strip()
+                husbName = p_dict["Name"].strip()
         #US08
         children_list_split = family_list[family_count-1]["Children"].split()
         for child in children_list_split:
@@ -423,31 +441,41 @@ for count, line in enumerate(Lines):
                         birth_before_parents_death(p_dict["Birthday"], p_dict["Name"], p_dict["ID"].strip(), wife_death, True, str(count+1))
                     if(husb_death != "N/A"):
                         birth_before_parents_death(p_dict["Birthday"], p_dict["Name"], p_dict["ID"].strip(), husb_death, False, str(count+1))
+                    #US12
+                    if(wifeId != "N/A"):
+                        parent_too_old(p_dict["Birthday"], wifeBirth, wifeName, wifeId, "F", str(count+1))
+                    if(husbId != "N/A"):
+                        parent_too_old(p_dict["Birthday"], husbBirth, husbName, husbId, "M", str(count+1))
 
-
-        #US11
-
-        # #US12
-        # husband = family_list[family_count-1]["Husband ID"]
-        # children = family_list[family_count-1]["Children"].split()
-        # for c in children:
-        #     childName = ""
-        #     husbName = ""
-        #     cbirth = ""
-        #     pbirth = ""
-        #     for p_dict in person_list:
-        #         if p_dict["ID"].strip() == c:
-        #             childName = p_dict["Name"]
-        #             cbirth = p_dict["Birthday"]
-        #             print(childName)
-        #             print(cbirth)
-        #         if p_dict["ID"].strip() == husband:
-        #             husbName = p_dict["Name"]
-        #             pbirth = p_dict["Birthday"]
-        #     parent_too_old(cbirth, pbirth, husbName, husband, "M", str(count+1)) GIVES ERROR ON STRING NOT BEING ABLE TO BE PARSED
-
-
-
+#US11
+# create dictionary of all married, divorced dates of husband and wife and iterate through if their marriage exists already
+bigamy_dict = {}
+for fam in family_list:
+    if fam["Husband ID"] != "N/A":
+        if not ("Divorced" in fam.keys()):
+            fam["Divorced"] = "N/A"
+        if not ("Married" in fam.keys()):
+            fam["Married"] = "N/A"
+        if not (fam["Husband ID"] in bigamy_dict): # add husband's married and divorced dates to dict
+            bigamy_dict[fam["Husband ID"]] = []
+            bigamy_dict[fam["Husband ID"]].append(fam["Married"])
+            bigamy_dict[fam["Husband ID"]].append(fam["Divorced"])
+    if fam["Wife ID"] != "N/A":
+        if not ("Divorced" in fam.keys()):
+            fam["Divorced"] = "N/A"
+        if not ("Married" in fam.keys()):
+            fam["Married"] = "N/A"
+        if not (fam["Wife ID"] in bigamy_dict): # add wife's married and divorced dates to dict
+            bigamy_dict[fam["Wife ID"]] = []
+            bigamy_dict[fam["Wife ID"]].append(fam["Married"])
+            bigamy_dict[fam["Wife ID"]].append(fam["Divorced"])
+for count, person in enumerate(family_list):
+    if count == 0:
+        continue
+    if person["Husband ID"] in bigamy_dict:
+        no_bigamy(bigamy_dict[person["Husband ID"]][0], person["Married"], bigamy_dict[person["Husband ID"]][1], person["Husband Name"], person["ID"], str(count))
+    if person["Wife ID"] in bigamy_dict:
+        no_bigamy(bigamy_dict[person["Wife ID"]][0], person["Married"], bigamy_dict[person["Wife ID"]][1], person["Wife Name"], person["ID"], str(count))    
 
 #adding individuals in the end
 for indiv_dict in person_list:
