@@ -451,20 +451,16 @@ for count, line in enumerate(Lines):
 # create dictionary of all married, divorced dates of husband and wife and iterate through if their marriage exists already
 bigamy_dict = {}
 for fam in family_list:
-    if fam["Husband ID"] != "N/A":
-        if not ("Divorced" in fam.keys()):
+    if not ("Divorced" in fam.keys()):
             fam["Divorced"] = "N/A"
-        if not ("Married" in fam.keys()):
-            fam["Married"] = "N/A"
+    if not ("Married" in fam.keys()):
+        fam["Married"] = "N/A"
+    if fam["Husband ID"] != "N/A":
         if not (fam["Husband ID"] in bigamy_dict): # add husband's married and divorced dates to dict
             bigamy_dict[fam["Husband ID"]] = []
             bigamy_dict[fam["Husband ID"]].append(fam["Married"])
             bigamy_dict[fam["Husband ID"]].append(fam["Divorced"])
     if fam["Wife ID"] != "N/A":
-        if not ("Divorced" in fam.keys()):
-            fam["Divorced"] = "N/A"
-        if not ("Married" in fam.keys()):
-            fam["Married"] = "N/A"
         if not (fam["Wife ID"] in bigamy_dict): # add wife's married and divorced dates to dict
             bigamy_dict[fam["Wife ID"]] = []
             bigamy_dict[fam["Wife ID"]].append(fam["Married"])
