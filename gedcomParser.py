@@ -139,7 +139,7 @@ def birth_before_parents_death(child_birth_date, child_name, child_id, parent_de
             error_str = "Error US09: Birth of " +child_name+"("+child_id+") is after 9 months after the death of their father on line "+lineNum+"."
             print(error_str)
             return error_str
-    return;
+    return
 
 #US10 Marriage after 14
 def marriage_after_14(curr_id, curr_name, marr_date, birt_date, lineNum):
@@ -180,6 +180,44 @@ def parent_too_old(cbirth, pbirth, p_name, curr_id, gender, lineNum):
         return anom_str
     elif gender == 'M' and yearsDifference > 80:
         anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a father who is "+str(yearsDifference)+" (more than 80) years older than his child on line "+lineNum+"."
+        print(anom_str)
+        return anom_str
+    else:
+        return
+
+#US13 Siblings spacing
+def siblings_spacing(bday_list, fam_id, lineNum):
+    #for each sibling in sib_count, compare consecutive siblings//for each child in a family
+    #find the difference in age between the closest in age siblings (consectively go through and compare; should be in order)
+    #if they were (born less than two days apart) OR (greater than 8 months apart): return
+    #else: return anom_str
+    for i in range(len(bday_list)):
+        for j in range(i+1, len(bday_list)):
+            time = abs(datetime.date(parse(bday_list[i])) - datetime.date(parse(bday_list[j])))
+            daysDifference = math.floor(time.total_seconds()/86400)
+            monthsDifference = math.floor(time.total_seconds()/2628000)
+            if ((daysDifference > 2) and (monthsDifference < 8)): #should i convert all values in the list into days? or can i just subtract?
+                anom_str = "Anomaly US13: Family " + str(fam_id) + " has children with invalid age differences on line " + str(lineNum) + "."  
+                print(anom_str)
+                return anom_str
+    return
+
+#US14 Multiple births, no more than 5 siblings born at the same time
+def multiple_births(bday_list, fam_id, lineNum):
+    #for each child in a family: compare siblings to find those who are born less than two days apart
+    #if child 1 is born within 2 days of 2, compare child 3 to child 1, if they are also born within two days, increment to compare child 4 with child 1
+    #if child 1 is greater than the next child, check how many we counted and if it is less than 6, start comparing with ch2, else, error    
+    count = 0
+    for i in range(len(bday_list)):
+        for j in range(i+1, len(bday_list)):
+            time = datetime.date(parse(bday_list[i])) - datetime.date(parse(bday_list[j]))
+            daysDifference = math.floor(time.total_seconds()/86400)
+            if (daysDifference < 2):
+                count = count + 1
+            else:
+                count = 0 #reset
+    if (count > 5):
+        anom_str = "Anomaly US14: Family " + str(fam_id) + " has more than 5 children born at the same time on line " + str(lineNum) + "."  
         print(anom_str)
         return anom_str
     else:
@@ -307,12 +345,28 @@ for count, line in enumerate(Lines):
     if (family_count > 0 and "Children" in family_list[family_count-1]):
         if (tag == "TRLR"):
             more_than_15_siblings(len(old_children_list), family_list[family_count-1]["ID"].strip(), str(count+1))
+            bday_list = []
+            for child in old_children_list:
+                for p_dict in person_list:
+                    if p_dict["ID"] == child:
+                        bday_list.append(p_dict["Birthday"])
+            #US13
+            print(bday_list)
+            siblings_spacing(bday_list, family_list[family_count-1]["ID"].strip(), str(count+1))
+            
+            #US14
+            multiple_births(bday_list, family_list[family_count-1]["ID"].strip(), str(count+1))    
         if (len(old_children_list) == 0):
             old_children_list = family_list[family_count-1]["Children"].split()
 
         if (family_list[family_count-1]["Children"].split()[0] != old_children_list[0]):
-            more_than_15_siblings(len(old_children_list), family_list[family_count-1]["ID"].strip(), str(count+1))
-
+            more_than_15_siblings(len(old_children_list), family_list[family_count-2]["ID"].strip(), str(count+1))
+            bday_list = []
+            for child in old_children_list:
+                for p_dict in person_list:
+                    if p_dict["ID"] == child:
+                        bday_list.append(p_dict["Birthday"])
+            siblings_spacing(bday_list, family_list[family_count-1]["ID"].strip(), str(count+1))
             old_children_list = family_list[family_count-1]["Children"].split()
         else:
             old_children_list = family_list[family_count-1]["Children"].split()

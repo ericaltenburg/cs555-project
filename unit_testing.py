@@ -3,7 +3,7 @@ from gedcomParser import *
 from datetime import *
 from dateutil.parser import parse
 
-class TestGedcome(unittest.TestCase):
+class TestGedcom(unittest.TestCase):
 
     def test_before_current_date(self):
         self.assertEqual(before_current_date("01-01-2040", "Julie", "I01", "Birth", "1"),
@@ -52,6 +52,13 @@ class TestGedcome(unittest.TestCase):
     def test_marriage_after_14(self):
         self.assertEqual(marriage_after_14("I02", "Suzy Smith", "01-01-2005", "02-02-2000", "128"),
                          "Error US10: Birth of Suzy Smith(I02) is less than 14 years before their marriage date on line 128.")
+
+    def test_siblings_spacing(self):
+        self.assertEqual(siblings_spacing(["02-15-1968", "02-16-1968", "03-29-1969", "05-29-1969"], 20, 140),
+                        "Anomaly US13: Family 20 has children with invalid age differences on line 140.")
+    def test_multiple_births(self):
+        self.assertEqual(multiple_births(["03-23-1966", "03-23-1966", "02-15-1968","02-15-1968", "02-15-1968", "02-16-1968", "02-16-1968"], 21, 210), 
+                        "Anomaly US14: Family 21 has more than 5 children born at the same time on line 210.")
         
 if __name__ == '__main__':
     unittest.main()
