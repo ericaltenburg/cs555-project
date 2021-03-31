@@ -24,7 +24,7 @@ families = PrettyTable()
 families.field_names = ["ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children", "Married", "Divorced"]
 family_field_names = ["ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children", "Married", "Divorced"]
 
-f = open('family.ged', 'r')
+f = open('family_Sprint2.ged', 'r')
 Lines = f.readlines()
 
 tags = ["INDI", "NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "FAM", "MARR",
@@ -171,15 +171,15 @@ def no_bigamy(marr_date1, marr_date2, div_date1, curr_name, curr_id, lineNum):
     return
 
 #US12 Parent not too old
-def parent_too_old(cbirth, pbirth, p_name, curr_id, gender, lineNum):
+def parent_too_old(cbirth, pbirth, p_name, curr_id, gender, chil_id, lineNum):
     time = datetime.date(parse(cbirth)) - datetime.date(parse(pbirth))
     yearsDifference = math.floor(time.total_seconds()/31536000)
     if gender == 'F' and yearsDifference > 60:
-        anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a mother who is "+str(yearsDifference)+" (more than 60) years older than her child on line "+lineNum+"."
+        anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a mother who is "+str(yearsDifference)+" (more than 60) years older than her child("+chil_id+") on line "+lineNum+"."
         print(anom_str)
         return anom_str
     elif gender == 'M' and yearsDifference > 80:
-        anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a father who is "+str(yearsDifference)+" (more than 80) years older than his child on line "+lineNum+"."
+        anom_str = "Anomaly US12: " +p_name+"("+curr_id+") is a father who is "+str(yearsDifference)+" (more than 80) years older than his child("+chil_id+") on line "+lineNum+"."
         print(anom_str)
         return anom_str
     else:
@@ -344,14 +344,13 @@ for count, line in enumerate(Lines):
     #US15
     if (family_count > 0 and "Children" in family_list[family_count-1]):
         if (tag == "TRLR"):
-            more_than_15_siblings(len(old_children_list), family_list[family_count-1]["ID"].strip(), str(count+1))
+            more_than_15_siblings(len(old_children_list), family_list[family_count-2]["ID"].strip(), str(count+1))
             bday_list = []
             for child in old_children_list:
                 for p_dict in person_list:
-                    if p_dict["ID"] == child:
+                    if p_dict["ID"].strip() == child.strip():
                         bday_list.append(p_dict["Birthday"])
             #US13
-            print(bday_list)
             siblings_spacing(bday_list, family_list[family_count-1]["ID"].strip(), str(count+1))
             
             #US14
@@ -364,7 +363,7 @@ for count, line in enumerate(Lines):
             bday_list = []
             for child in old_children_list:
                 for p_dict in person_list:
-                    if p_dict["ID"] == child:
+                    if p_dict["ID"].strip() == child.strip():
                         bday_list.append(p_dict["Birthday"])
             siblings_spacing(bday_list, family_list[family_count-1]["ID"].strip(), str(count+1))
             old_children_list = family_list[family_count-1]["Children"].split()
@@ -497,9 +496,9 @@ for count, line in enumerate(Lines):
                         birth_before_parents_death(p_dict["Birthday"], p_dict["Name"], p_dict["ID"].strip(), husb_death, False, str(count+1))
                     #US12
                     if(wifeId != "N/A"):
-                        parent_too_old(p_dict["Birthday"], wifeBirth, wifeName, wifeId, "F", str(count+1))
+                        parent_too_old(p_dict["Birthday"], wifeBirth, wifeName, wifeId, "F", p_dict["ID"].strip(), str(count+1))
                     if(husbId != "N/A"):
-                        parent_too_old(p_dict["Birthday"], husbBirth, husbName, husbId, "M", str(count+1))
+                        parent_too_old(p_dict["Birthday"], husbBirth, husbName, husbId, "M", p_dict["ID"].strip(),  str(count+1))
 
 #US11
 # create dictionary of all married, divorced dates of husband and wife and iterate through if their marriage exists already

@@ -36,11 +36,11 @@ class TestGedcom(unittest.TestCase):
         self.assertEqual(no_bigamy("01-01-1990", "01-01-1999", "N/A", "Manny", "I18", "19"), 
                         "Anomaly US11: Marriage of Manny(I18) occurred during another marriage (there is bigamy) on Families table line 19.")
     def test_parent_too_old1(self):
-        self.assertEqual(parent_too_old("01-02-2000", "01-01-1900", "Jackie", "I12", "F", "17"), 
-                        "Anomaly US12: Jackie(I12) is a mother who is 100 (more than 60) years older than her child on line 17.")
+        self.assertEqual(parent_too_old("01-02-2000", "01-01-1900", "Jackie", "I12", "F", "I01", "17"), 
+                        "Anomaly US12: Jackie(I12) is a mother who is 100 (more than 60) years older than her child(I01) on line 17.")
     def test_parent_too_old2(self):
-        self.assertEqual(parent_too_old("02-02-2000", "01-01-1919", "Jacob", "I12", "M", "17"), 
-                        "Anomaly US12: Jacob(I12) is a father who is 81 (more than 80) years older than his child on line 17.")
+        self.assertEqual(parent_too_old("02-02-2000", "01-01-1919", "Jacob", "I12", "M", "I01", "17"), 
+                        "Anomaly US12: Jacob(I12) is a father who is 81 (more than 80) years older than his child(I01) on line 17.")
     def test_more_than_15_siblings(self):
         self.assertEqual(more_than_15_siblings(16, "F06", "128"), "Anomaly US15: Family (F06) has more than 15 siblings on line 128.")
     def test_different_last_names(self):
