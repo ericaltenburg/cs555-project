@@ -24,7 +24,7 @@ families = PrettyTable()
 families.field_names = ["ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children", "Married", "Divorced"]
 family_field_names = ["ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children", "Married", "Divorced"]
 
-f = open('family_Sprint3.ged', 'r')
+f = open('family.ged.ged', 'r')
 Lines = f.readlines()
 
 tags = ["INDI", "NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "FAM", "MARR",
