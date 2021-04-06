@@ -59,6 +59,10 @@ class TestGedcom(unittest.TestCase):
     def test_multiple_births(self):
         self.assertEqual(multiple_births(["03-23-1966", "03-23-1966", "02-15-1968","02-15-1968", "02-15-1968", "02-16-1968", "02-16-1968"], 21, 210), 
                         "Anomaly US14: Family 21 has more than 5 children born at the same time on line 210.")
+    def test_no_descendant_marriage(self):
+        self.assertEqual(no_descendant_marriage("I01", "John Doe", "I03", "211"), "Error US17: Parent John Doe(I01) is married to their child (I03) on line 211.")
+    def test_no_sibling_marriage(self):
+        self.assertEqual(no_sibling_marriage("I01", "John Doe", "I02", "Jane Doe", "211"), "Error US18: Sibling John Doe(I01) is married to their sibling Jane Doe(I02) on line 211.")
         
 if __name__ == '__main__':
     unittest.main()

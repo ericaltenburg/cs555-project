@@ -24,7 +24,7 @@ families = PrettyTable()
 families.field_names = ["ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children", "Married", "Divorced"]
 family_field_names = ["ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children", "Married", "Divorced"]
 
-f = open('family_Sprint2.ged', 'r')
+f = open('family_Sprint3.ged', 'r')
 Lines = f.readlines()
 
 tags = ["INDI", "NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "FAM", "MARR",
@@ -240,7 +240,19 @@ def different_last_names(father_name, p_name, curr_id, lineNum):
         return error_str
     else:
         return
-    
+
+#US17 Parents should not marry any of their descendants
+def no_descendant_marriage(parent_id, parent_name, child_id, lineNum):
+    error_str = "Error US17: Parent "+parent_name+"("+parent_id+") is married to their child ("+child_id+") on line "+lineNum+"."
+    print(error_str)
+    return error_str
+
+#US18 Siblings should not marry each other
+def no_sibling_marriage(sibling1_id, sibling1_name, sibling2_id, sibling2_name, lineNum):
+    error_str = "Error US18: Sibling "+sibling1_name+"("+sibling1_id+") is married to their sibling "+sibling2_name+"("+sibling2_id+") on line "+lineNum+"."
+    print(error_str)
+    return error_str
+
 #parsing file
 for count, line in enumerate(Lines):
     #initializing line variables
@@ -351,7 +363,9 @@ for count, line in enumerate(Lines):
                     if p_dict["ID"].strip() == child.strip():
                         bday_list.append(p_dict["Birthday"])
             #US13
-            siblings_spacing(bday_list, family_list[family_count-1]["ID"].strip(), str(count+1))
+            #4.6.21 May have to remove this but was getting a sibling spacing error with only one child in the family
+            if(len((family_list[family_count-1]["Children"])) > 5):
+                siblings_spacing(bday_list, family_list[family_count-1]["ID"].strip(), str(count+1))
             
             #US14
             multiple_births(bday_list, family_list[family_count-1]["ID"].strip(), str(count+1))    
@@ -365,7 +379,9 @@ for count, line in enumerate(Lines):
                 for p_dict in person_list:
                     if p_dict["ID"].strip() == child.strip():
                         bday_list.append(p_dict["Birthday"])
-            siblings_spacing(bday_list, family_list[family_count-1]["ID"].strip(), str(count+1))
+            #4.6.21 May have to remove this but was getting a sibling spacing error with only one child in the family
+            if(len((family_list[family_count-1]["Children"])) > 5):
+                siblings_spacing(bday_list, family_list[family_count-1]["ID"].strip(), str(count+1))
             old_children_list = family_list[family_count-1]["Children"].split()
         else:
             old_children_list = family_list[family_count-1]["Children"].split()
@@ -485,7 +501,13 @@ for count, line in enumerate(Lines):
                 husbName = p_dict["Name"].strip()
         #US08
         children_list_split = family_list[family_count-1]["Children"].split()
+            
         for child in children_list_split:
+            #us17
+            if child == family_list[family_count-1]["Husband ID"].strip():
+                no_descendant_marriage(family_list[family_count-1]["Wife ID"].strip(), family_list[family_count-1]["Wife Name"], child, str(count+1))
+            if child == family_list[family_count-1]["Wife ID"].strip():
+                no_descendant_marriage(family_list[family_count-1]["Husband ID"].strip(), family_list[family_count-1]["Husband Name"], child, str(count+1))
             for p_dict in person_list:
                 if p_dict["ID"].strip() == child:
                     birth_before_marriage(p_dict["Birthday"], family_list[family_count-1]["Married"], family_list[family_count-1]["Divorced"], p_dict["Name"], p_dict["ID"].strip(), family_list[family_count-1]["ID"].strip(), str(count+1))
@@ -499,6 +521,7 @@ for count, line in enumerate(Lines):
                         parent_too_old(p_dict["Birthday"], wifeBirth, wifeName, wifeId, "F", p_dict["ID"].strip(), str(count+1))
                     if(husbId != "N/A"):
                         parent_too_old(p_dict["Birthday"], husbBirth, husbName, husbId, "M", p_dict["ID"].strip(),  str(count+1))
+          
 
 #US11
 # create dictionary of all married, divorced dates of husband and wife and iterate through if their marriage exists already
@@ -525,6 +548,14 @@ for count, person in enumerate(family_list):
         no_bigamy(bigamy_dict[person["Husband ID"]][0], person["Married"], bigamy_dict[person["Husband ID"]][1], person["Husband Name"], person["ID"], str(count+1))
     if person["Wife ID"] in bigamy_dict:
         no_bigamy(bigamy_dict[person["Wife ID"]][0], person["Married"], bigamy_dict[person["Wife ID"]][1], person["Wife Name"], person["ID"], str(count+1))    
+
+#US18
+for family in family_list:
+    children_list_split = family["Children"].split()
+    for family2 in family_list:
+        if (family2["Husband ID"].strip() in children_list_split) and (family2["Wife ID"].strip() in children_list_split):
+            no_sibling_marriage(family2["Husband ID"], family2["Husband Name"], family2["Wife ID"], family2["Wife Name"], str(count+1))  
+
 
 #adding individuals in the end
 for indiv_dict in person_list:
