@@ -24,7 +24,7 @@ families = PrettyTable()
 families.field_names = ["ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children", "Married", "Divorced"]
 family_field_names = ["ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children", "Married", "Divorced"]
 
-f = open('family.ged.ged', 'r')
+f = open('family.ged', 'r')
 Lines = f.readlines()
 
 tags = ["INDI", "NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "FAM", "MARR",
@@ -252,6 +252,17 @@ def no_sibling_marriage(sibling1_id, sibling1_name, sibling2_id, sibling2_name, 
     error_str = "Error US18: Sibling "+sibling1_name+"("+sibling1_id+") is married to their sibling "+sibling2_name+"("+sibling2_id+") on line "+lineNum+"."
     print(error_str)
     return error_str
+
+#US22 Unique individual and family IDs
+def unique_id(type, id_num, name, lineNum):
+    if type == "INDI":
+        error_str = "Error US22: Individual (" + name + ") does not have a unique ID (" + id_num.strip() + ") on Individuals List line "+lineNum+"."
+        print(error_str)
+        return error_str
+    else:
+        error_str = "Error US22: Family with husband " + name + " does not have a unique ID (" + id_num.strip() + ") on Families List line "+lineNum+"."
+        print(error_str)
+        return error_str
 
 #parsing file
 for count, line in enumerate(Lines):
@@ -556,6 +567,18 @@ for family in family_list:
         if (family2["Husband ID"].strip() in children_list_split) and (family2["Wife ID"].strip() in children_list_split):
             no_sibling_marriage(family2["Husband ID"], family2["Husband Name"], family2["Wife ID"], family2["Wife Name"], str(count+1))  
 
+#US22
+indi_ids_list, fam_ids_list = [], []
+for count, i in enumerate(person_list):
+    for j in indi_ids_list:
+        if i["ID"] == j:
+            unique_id("INDI", i["ID"], i["Name"], str(count+1))
+    indi_ids_list.append(i["ID"])
+for count, x in enumerate(family_list):
+    for y in fam_ids_list:
+        if x["ID"] == y:
+            unique_id("FAM", x["ID"], x["Husband Name"], str(count+1))
+    fam_ids_list.append(x["ID"])
 
 #adding individuals in the end
 for indiv_dict in person_list:
