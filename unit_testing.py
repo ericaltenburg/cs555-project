@@ -63,6 +63,10 @@ class TestGedcom(unittest.TestCase):
         self.assertEqual(no_descendant_marriage("I01", "John Doe", "I03", "211"), "Error US17: Parent John Doe(I01) is married to their child (I03) on line 211.")
     def test_no_sibling_marriage(self):
         self.assertEqual(no_sibling_marriage("I01", "John Doe", "I02", "Jane Doe", "211"), "Error US18: Sibling John Doe(I01) is married to their sibling Jane Doe(I02) on line 211.")
+    def test_incorrect_gender_husb(self):
+        self.assertEqual(incorrect_gender_husb("HUSB", "Betty Green", "I14", "F", "88"), "Error US21: Husband role and gender are incorrect for Betty Green (I14) on Individual List line 88.")
+    def test_incorrect_gender_wife(self):
+        self.assertEqual(incorrect_gender_wife("WIFE", "Bobby Yellow", "I17", "M", "74"), "Error US21: Wife role and gender are incorrect for Bobby Yellow (I17) on Individual List line 74.")
     def test_unique_id(self):
         self.assertEqual(unique_id("INDI", "I2", "Zack Martin", "34"), "Error US22: Individual (Zack Martin) does not have a unique ID (I2) on Individuals List line 34.")
     def test_unique_id(self):

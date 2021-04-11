@@ -253,6 +253,16 @@ def no_sibling_marriage(sibling1_id, sibling1_name, sibling2_id, sibling2_name, 
     print(error_str)
     return error_str
 
+#US21 Correct gender for role: male = husband, female = wife
+def incorrect_gender_husb(role, name, id_num, gender, lineNum):
+    if not (gender.strip() == "M" and role == "HUSB"):
+        print("Error US21: Husband role and gender are incorrect for "+name+" ("+id_num+") on Individual List line "+lineNum+".")
+        return "Error US21: Husband role and gender are incorrect for "+name+" ("+id_num+") on Individual List line "+lineNum+"."
+def incorrect_gender_wife(role, name, id_num, gender, lineNum):
+    if not (gender.strip() == "F" and role == "WIFE"):
+        print("Error US21: Wife role and gender are incorrect for "+name+" ("+id_num+") on Individual List line "+lineNum+".")
+        return "Error US21: Wife role and gender are incorrect for "+name+" ("+id_num+") on Individual List line "+lineNum+"."
+
 #US22 Unique individual and family IDs
 def unique_id(type, id_num, name, lineNum):
     if type == "INDI":
@@ -512,7 +522,6 @@ for count, line in enumerate(Lines):
                 husbName = p_dict["Name"].strip()
         #US08
         children_list_split = family_list[family_count-1]["Children"].split()
-            
         for child in children_list_split:
             #us17
             if child == family_list[family_count-1]["Husband ID"].strip():
@@ -567,6 +576,18 @@ for family in family_list:
         if (family2["Husband ID"].strip() in children_list_split) and (family2["Wife ID"].strip() in children_list_split):
             no_sibling_marriage(family2["Husband ID"], family2["Husband Name"], family2["Wife ID"], family2["Wife Name"], str(count+1))  
 
+#US21
+husb_id_list, wife_id_list = [], []
+for p in family_list:
+    husb_id_list.append(p["Husband ID"])
+    wife_id_list.append(p["Wife ID"])
+for h in husb_id_list:
+    for count, i in enumerate(person_list):
+        if h == i["ID"]: incorrect_gender_husb("HUSB", i["Name"], i["ID"], i["Gender"], str(count+1))
+for w in wife_id_list:
+    for count, i in enumerate(person_list):
+        if w == i["ID"]: incorrect_gender_wife("WIFE", i["Name"], i["ID"], i["Gender"], str(count+1))    
+    
 #US22
 indi_ids_list, fam_ids_list = [], []
 for count, i in enumerate(person_list):
