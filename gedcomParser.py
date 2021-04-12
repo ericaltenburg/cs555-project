@@ -274,6 +274,14 @@ def unique_id(type, id_num, name, lineNum):
         print(error_str)
         return error_str
 
+def same_name_birthdate(person1_name, person2_name, person1_age, person2_age, person1_id, person2_id, lineNum):
+    if (person1_name == person2_name and person1_age == person2_age):
+        error_str = f"Error US23: Individual with ID {person1_id} has the same name and birth date as {person2_id} on Individual List Line {lineNum}."
+        print(error_str)
+        return error_str
+    else:
+        return
+
 #parsing file
 for count, line in enumerate(Lines):
     #initializing line variables
@@ -330,6 +338,10 @@ for count, line in enumerate(Lines):
         if(tag == "DATE" and birt_last == True):
             deat_next = True
             born = parse(arguments) 
+            #US23
+            for p_dict in person_list:
+                if (p_dict["ID"].strip() != person_list[person_count-1]["ID"].strip()):
+                    same_name_birthdate(person_list[person_count-1]["Name"], p_dict["Name"], arguments, p_dict["Birthday"], person_list[person_count-1], p_dict["ID"].strip(), str(count+1))
             person_list[person_count-1] ["Birthday"] = arguments
             person_list[person_count-1]["Age"] = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
             #us01

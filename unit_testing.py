@@ -71,6 +71,8 @@ class TestGedcom(unittest.TestCase):
         self.assertEqual(unique_id("INDI", "I2", "Zack Martin", "34"), "Error US22: Individual (Zack Martin) does not have a unique ID (I2) on Individuals List line 34.")
     def test_unique_id(self):
         self.assertEqual(unique_id("FAM", "I6", "Cody Martin", "43"), "Error US22: Family with husband Cody Martin does not have a unique ID (I6) on Families List line 43.")
-
+    def test_same_name_birthdate(self):
+        self.assertEqual(same_name_birthdate("Eric Altenburg", "Eric Altenburg", "04-14-1999", "04-14-1999", "I01", "I02", "123"), "Error US23: Individual with ID I01 has the same name and birth date as I02 on Individual List Line 123.")
+    
 if __name__ == '__main__':
     unittest.main()
