@@ -73,6 +73,19 @@ class TestGedcom(unittest.TestCase):
         self.assertEqual(unique_id("FAM", "I6", "Cody Martin", "43"), "Error US22: Family with husband Cody Martin does not have a unique ID (I6) on Families List line 43.")
     def test_same_name_birthdate(self):
         self.assertEqual(same_name_birthdate("Eric Altenburg", "Eric Altenburg", "04-14-1999", "04-14-1999", "I01", "I02", "123"), "Error US23: Individual with ID I01 has the same name and birth date as I02 on Individual List Line 123.")
-    
+    def test_same_spouse_name_marr_date(self):
+        existing_fam_dict = {
+            "Husband Name" : "Eric Altenburg",
+            "Wife Name" : "Erica Altenburg",
+            "Married" : "04-14-1999",
+            "ID" : "@F1@ "
+        }
+        new_fam_dict = {
+            "Husband Name" : "Eric Altenburg",
+            "Wife Name" : "Erica Altenburg",
+            "Married" : "04-14-1999",
+            "ID" : "@F2@ "
+        }
+        self.assertEqual(same_spouse_name_marr_date(existing_fam_dict, new_fam_dict, "123"), "Error US24: Family @F2@ has the same spouse names and marriage date as family @F1@ on Families List line 123.")
 if __name__ == '__main__':
     unittest.main()

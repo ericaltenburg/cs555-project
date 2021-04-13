@@ -274,9 +274,21 @@ def unique_id(type, id_num, name, lineNum):
         print(error_str)
         return error_str
 
+#US23 Two individuals cannot have the same name and same birth date
 def same_name_birthdate(person1_name, person2_name, person1_age, person2_age, person1_id, person2_id, lineNum):
     if (person1_name == person2_name and person1_age == person2_age):
         error_str = f"Error US23: Individual with ID {person1_id} has the same name and birth date as {person2_id} on Individual List Line {lineNum}."
+        print(error_str)
+        return error_str
+    else:
+        return
+    
+#US24 Two families cannot have the same spouse names and marriage date
+def same_spouse_name_marr_date(existing_fam_dict, new_fam_dict, lineNum):
+    if (existing_fam_dict["Husband Name"] == new_fam_dict["Husband Name"] and existing_fam_dict["Wife Name"] == new_fam_dict["Wife Name"] and existing_fam_dict["Married"] == new_fam_dict["Married"]):
+        existing_fam_id = existing_fam_dict["ID"].strip()
+        new_fam_id = new_fam_dict["ID"].strip()
+        error_str = f"Error US24: Family {new_fam_id} has the same spouse names and marriage date as family {existing_fam_id} on Families List line {lineNum}."
         print(error_str)
         return error_str
     else:
@@ -480,6 +492,10 @@ for count, line in enumerate(Lines):
             continue
         if(marr_next == True and tag == "DATE"):
             family_list[family_count-1]["Married"] = arguments
+            #US24
+            for fam_dict in family_list:
+                if (fam_dict["ID"].strip() != family_list[family_count-1]["ID"].strip()):
+                    same_spouse_name_marr_date(fam_dict, family_list[family_count-1], str(count+1))
             #us02
             for p_dict in person_list:
                 if (p_dict["ID"] == family_list[family_count-1]["Husband ID"] or p_dict["ID"] == family_list[family_count-1]["Wife ID"]):
