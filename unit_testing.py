@@ -75,10 +75,9 @@ class TestGedcom(unittest.TestCase):
 		self.assertEqual(same_name_birthdate("Eric Altenburg", "Eric Altenburg", "04-14-1999", "04-14-1999", "I01", "I02", "123"), "Error US23: Individual with ID I01 has the same name and birth date as I02 on Individual List Line 123.")
 	
 	def test_recent_births(self):
-		self.assertEqual(recent_births("04-13-2021", "Sam Case", "I35", "390"), "Info US19: Sam Case (I35) was born within the past 30 days on 04-13-2021.")
+		self.assertEqual(recent_births(parse("13 APR 2021"), "Sam Case", "I35", "390"), "Info US35: Sam Case (I35) was born within the past 30 days on 2021-04-13 00:00:00 on line 390.")
 	def test_recent_deaths(self):
-		self.assertEqual(recent_deaths("04-13-2021", "Pat Smith", "I28", "122"), "Info US20: Pat Smith (I28) has died within the past 30 days on 04-13-2021.")
-
+		self.assertEqual(recent_deaths(parse("13 APR 2021"), "Pat Smith", "I28", "122"), "Info US36: Pat Smith (I28) has died within the past 30 days on 2021-04-13 00:00:00 on line 122.")
 
 	def test_same_spouse_name_marr_date(self):
 		existing_fam_dict = {

@@ -1,0 +1,63 @@
+Error US23: Individual with ID @I9@ has the same name and birth date as @I7@ on Individual List Line 92.
+Info US35: Eric /Altenburg/  (@I16@) was born within the past 30 days on 2021-04-13 00:00:00 on line 167.
+Info US36: Richard /Altenburg/  (@I18@) has died within the past 30 days on 2021-04-04 00:00:00 on line 187.
+Anomaly US16: Garfield (@I7@) does not have the same name as their father (Chasnov) on line 272.
+Anomaly US16: Garfield (@I9@) does not have the same name as their father (Chasnov) on line 274.
+Error US24: Family @F4@ has the same spouse names and marriage date as family @F1@ on Families List line 285.
+Error US02: Marriage date of Bill /Chasnov/ (@I10@) occurs before their birth date on line 285.
+Error US10: Birth of Bill /Chasnov/ (@I10@) is less than 14 years before their marriage date on line 285.
+Error US02: Marriage date of Laney /Smith/ (@I11@) occurs before their birth date on line 285.
+Error US10: Birth of Laney /Smith/ (@I11@) is less than 14 years before their marriage date on line 285.
+Error US02: Marriage date of Richard /Altenburg/ (@I15@) occurs before their birth date on line 304.
+Error US10: Birth of Richard /Altenburg/ (@I15@) is less than 14 years before their marriage date on line 304.
+Error US17: Parent Richard /Altenburg/ (@I18@) is married to their child (@I15@) on line 306.
+Anomaly US11: Marriage of Richard /Altenburg/ (@F6@ ) occurred during another marriage (there is bigamy) on Families table line 6.
+Error US18: Sibling Adam /Chasnov/ (@I5@ ) is married to their sibling Robyn /Chasnov/ (@I4@ ) on line 7.
+Error US21: Husband role and gender are incorrect for Steve /Kaletcher/  (@I22@ ) on Individual List line 22.
+Error US21: Wife role and gender are incorrect for Richard /Altenburg/  (@I15@ ) on Individual List line 15.
+Error US21: Wife role and gender are incorrect for Valorie /Altenburg/  (@I21@ ) on Individual List line 21.
+Error US22: Individual (Rebecca /Garfield/ ) does not have a unique ID (@I9@) on Individuals List line 9.
+Done adding individuals to 'individuals' collection.
+Done adding families to 'families' collection.
+Individuals
++--------+-----------------------+--------+--------------+-----+-------+--------------+-------+--------+
+|   ID   |          Name         | Gender |   Birthday   | Age | Alive |    Death     | Child | Spouse |
++--------+-----------------------+--------+--------------+-----+-------+--------------+-------+--------+
+| @I1@   |     Laney /Smith/     |   F    | 9 SEP 1932   |  86 | False | 19 APR 2019  | @F1@  |  N/A   |
+| @I2@   |    Bill /Chasnov/     |   M    | 6 JUN 1928   |  85 | False | 10 SEP 2013  | @F2@  |  N/A   |
+| @I3@   |    Robin /Chasnov/    |   F    | 5 DEC 1990   |  30 |  True |     N/A      | @F2@  |  N/A   |
+| @I4@   |    Robyn /Chasnov/    |   F    | 15 FEB 1968  |  53 |  True |     N/A      | @F3@  | @F1@   |
+| @I5@   |    Adam /Chasnov/     |   M    | 8 JUL 1964   |  56 |  True |     N/A      |  N/A  | @F1@   |
+| @I6@   |   James /Garfield/    |   M    | 5 SEP 1967   |  53 |  True |     N/A      | @F3@  |  N/A   |
+| @I7@   |   Bryan /Garfield/    |   M    | 13 DEC 1999  |  21 |  True |     N/A      | @F3@  |  N/A   |
+| @I9@   |   Bryan /Garfield/    |   M    | 13 DEC 1999  |  21 |  True |     N/A      |  N/A  | @F3@   |
+| @I9@   |  Rebecca /Garfield/   |   F    | 6 JUL 2007   |  13 |  True |     N/A      |  N/A  | @F3@   |
+| @I10@  |    Bill /Chasnov/     |   M    | 5 NOV 1963   |  57 |  True |     N/A      | @F4@  | @F1@   |
+| @I11@  |     Laney /Smith/     |   F    | 2 APR 1969   |  52 |  True |     N/A      | @F4@  |  N/A   |
+| @I12@  |    Kara /Chasnov/     |   F    | 2 JUN 1999   |  21 |  True |     N/A      | @F4@  |  N/A   |
+| @I13@  |    Jenna /Chasnov/    |   F    | 6 FEB 2001   |  20 |  True |     N/A      |  N/A  | @F4@   |
+| @I14@  |    Donna /Chasnov/    |   F    | 6 SEP 1968   |  52 |  True |     N/A      | @F5@  | @F1@   |
+| @I15@  |  Richard /Altenburg/  |   M    | 17 JUN 1964  |  56 |  True |     N/A      | @F5@  | @F6@   |
+| @I16@  |   Eric /Altenburg/    |   M    | 13 APR 2021  |  0  |  True |     N/A      |  N/A  | @F5@   |
+| @I17@  |   Kyle /Altenburg/    |   M    | 15 MAY 2003  |  17 |  True |     N/A      |  N/A  | @F5@   |
+| @I18@  |  Richard /Altenburg/  |   M    | 26 MAR 1934  |  87 | False | 4 APR 2021   | @F6@  |  N/A   |
+| @I19@  | Loretta /Florkowski/  |   F    | 16 DEC 1939  |  81 |  True |     N/A      | @F6@  |  N/A   |
+| @I20@  |   Vicki /Altenburg/   |   F    | 8 DEC 1960   |  60 |  True |     N/A      | @F6@  |  N/A   |
+| @I21@  |  Valorie /Altenburg/  |   M    | 5 SEP 1962   |  58 |  True |     N/A      | @F7@  | @F6@   |
+| @I22@  |   Steve /Kaletcher/   |   F    | 27 JUL 1959  |  61 |  True |     N/A      | @F7@  |  N/A   |
+| @I23@  | Kristine /Kaletcher/  |   F    | 4 JUN 1995   |  25 |  True |     N/A      | @F7@  |  N/A   |
+| @I24@  |    Amy /Kaletcher/    |   F    | 24 APR 1997  |  23 |  True |     N/A      |  N/A  | @F7@   |
+| @I25@  |   Emily /Kaletcher/   |   F    | 16 OCT 1998  |  22 |  True |     N/A      |  N/A  | @F7@   |
++--------+-----------------------+--------+--------------+-----+-------+--------------+-------+--------+
+Families
++-------+------------+----------------------+---------+----------------------+------------------------+--------------+-------------+
+|   ID  | Husband ID |     Husband Name     | Wife ID |      Wife Name       |        Children        |   Married    |   Divorced  |
++-------+------------+----------------------+---------+----------------------+------------------------+--------------+-------------+
+| @F1@  |   @I2@     |   Bill /Chasnov/     |  @I1@   |    Laney /Smith/     | @I4@ @I5@ @I10@ @I14@  | 6 JUN 1950   | 4 APR 1979  |
+| @F2@  |   @I2@     |   Bill /Chasnov/     |   N/A   |         N/A          |         @I3@           |     N/A      |     N/A     |
+| @F3@  |   @I5@     |   Adam /Chasnov/     |  @I4@   |   Robyn /Chasnov/    |    @I7@ @I8@ @I9@      | 2 JUL 1993   |     N/A     |
+| @F4@  |   @I10@    |   Bill /Chasnov/     |  @I11@  |    Laney /Smith/     |      @I12@ @I13@       | 6 JUN 1950   |     N/A     |
+| @F5@  |   @I15@    | Richard /Altenburg/  |  @I14@  |   Donna /Chasnov/    |      @I16@ @I17@       | 29 OCT 1986  |     N/A     |
+| @F6@  |   @I18@    | Richard /Altenburg/  |  @I15@  | Richard /Altenburg/  |   @I15@ @I20@ @I21@    | 4 OCT 1959   |     N/A     |
+| @F7@  |   @I22@    |  Steve /Kaletcher/   |  @I21@  | Valorie /Altenburg/  |   @I23@ @I24@ @I25@    | 31 OCT 1979  |     N/A     |
++-------+------------+----------------------+---------+----------------------+------------------------+--------------+-------------+

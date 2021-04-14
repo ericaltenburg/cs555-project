@@ -253,24 +253,31 @@ def no_sibling_marriage(sibling1_id, sibling1_name, sibling2_id, sibling2_name, 
     print(error_str)
     return error_str
 
-#US19 List decent births
+#US35 List decent births
 def recent_births(birth_date, name, id_num, lineNum):
-	thirty_days_ago = (date.today()-timedelta(days=30))
-	thirty_days_since_birth = datetime.date(parse(birth_date))-timedelta(days=30)
+	#thirty_days_ago = (date.today()-timedelta(days=30))
+	#thirty_days_since_birth = (datetime.date(parse(birth_date))-timedelta(days=30))
 
-	if (thirty_days_since_birth <= thirty_days_ago):
-		info_str = "Info US19: "+name+" ("+id_num+") was born within the past 30 days on "+birth_date+"."
-		print(info_str)
-		return info_str	
+	thirty_days_since_birth = date.today()-(datetime.date(birth_date))
+	
 
-#US20 List recent deaths
-def recent_deaths(death_date, name, id_num, lineNum):
-	thirty_days_ago = (date.today()-timedelta(days=30))
-	thirty_days_since_death = datetime.date(parse(death_date))-timedelta(days=30)
-	if (thirty_days_since_death <= thirty_days_ago):
-		info_str = "Info US20: "+name+" ("+id_num+") has died within the past 30 days on "+death_date+"."
+	if thirty_days_since_birth <= timedelta(days=30):
+		info_str = "Info US35: "+name+" ("+id_num+") was born within the past 30 days on "+str(birth_date)+" on line "+lineNum+"."
 		print(info_str)
 		return info_str
+	else:
+		return 
+
+
+#US36 List recent deaths
+def recent_deaths(death_date, name, id_num, lineNum):
+	thirty_days_since_death = date.today()-(datetime.date(death_date))
+	if thirty_days_since_death <= timedelta(days=30):
+		info_str = "Info US36: "+name+" ("+id_num+") has died within the past 30 days on "+str(death_date)+" on line "+lineNum+"."
+		print(info_str)
+		return info_str
+	else:
+		return
 
 #US21 Correct gender for role: male = husband, female = wife
 def incorrect_gender_husb(role, name, id_num, gender, lineNum):
@@ -368,11 +375,14 @@ for count, line in enumerate(Lines):
             continue
         if(tag == "DATE" and birt_last == True):
             deat_next = True
-            born = parse(arguments) 
+            born = parse(arguments)
+			#US35
+            recent_births(born, person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), str(count+1))
+
             #US23
             for p_dict in person_list:
                 if (p_dict["ID"].strip() != person_list[person_count-1]["ID"].strip()):
-                    same_name_birthdate(person_list[person_count-1]["Name"], p_dict["Name"], arguments, p_dict["Birthday"], person_list[person_count-1], p_dict["ID"].strip(), str(count+1))
+                    same_name_birthdate(person_list[person_count-1]["Name"], p_dict["Name"], arguments, p_dict["Birthday"], person_list[person_count-1]["ID"].strip(), p_dict["ID"].strip(), str(count+1))
             person_list[person_count-1] ["Birthday"] = arguments
             person_list[person_count-1]["Age"] = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
             #us01
@@ -385,6 +395,8 @@ for count, line in enumerate(Lines):
             person_list[person_count-1]["Alive"] = False
             person_list[person_count-1]["Death"] = arguments
             death = parse(arguments)
+			#US36
+            recent_deaths(death, person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), str(count+1))
             person_list[person_count-1]["Age"] = (death.year - born.year - ((death.month, death.day) < (born.month, born.day)))
             #us01
             before_current_date(arguments, person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), "Death", str(count+1))
