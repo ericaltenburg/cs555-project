@@ -253,6 +253,25 @@ def no_sibling_marriage(sibling1_id, sibling1_name, sibling2_id, sibling2_name, 
     print(error_str)
     return error_str
 
+#US19 List decent births
+def recent_births(birth_date, name, id_num, lineNum):
+	thirty_days_ago = (date.today()-timedelta(days=30))
+	thirty_days_since_birth = datetime.date(parse(birth_date))-timedelta(days=30)
+
+	if (thirty_days_since_birth <= thirty_days_ago):
+		info_str = "Info US19: "+name+" ("+id_num+") was born within the past 30 days on "+birth_date+"."
+		print(info_str)
+		return info_str	
+
+#US20 List recent deaths
+def recent_deaths(death_date, name, id_num, lineNum):
+	thirty_days_ago = (date.today()-timedelta(days=30))
+	thirty_days_since_death = datetime.date(parse(death_date))-timedelta(days=30)
+	if (thirty_days_since_death <= thirty_days_ago):
+		info_str = "Info US20: "+name+" ("+id_num+") has died within the past 30 days on "+death_date+"."
+		print(info_str)
+		return info_str
+
 #US21 Correct gender for role: male = husband, female = wife
 def incorrect_gender_husb(role, name, id_num, gender, lineNum):
     if not (gender.strip() == "M" and role == "HUSB"):
@@ -603,7 +622,6 @@ for family in family_list:
     for family2 in family_list:
         if (family2["Husband ID"].strip() in children_list_split) and (family2["Wife ID"].strip() in children_list_split):
             no_sibling_marriage(family2["Husband ID"], family2["Husband Name"], family2["Wife ID"], family2["Wife Name"], str(count+1))  
-
 #US21
 husb_id_list, wife_id_list = [], []
 for p in family_list:
