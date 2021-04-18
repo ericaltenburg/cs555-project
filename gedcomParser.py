@@ -320,6 +320,24 @@ def same_spouse_name_marr_date(existing_fam_dict, new_fam_dict, lineNum):
     else:
         return
 
+#US25 No more than one child with the same name and birth date should appear in a family
+def unique_first_family_names(chil_name_birt_list, lineNum):
+    for key in chil_name_birt_list:
+        val = chil_name_birt_list[key]
+        if len(val) > 1:
+            error_str = "Anomaly US25: There are more than one instance of "+key+" born on "+val[0]+" on line "+lineNum+"."
+            print(error_str)
+            return error_str
+    return
+#US26 Check for consistency between individuals and family
+def check_consistency(ind_count, fam_count):
+    if ind_count != fam_count:
+        error_str = "Error US26: Individual entries: "+str(ind_count)+" do not match Family entries: "+str(fam_count)+"."
+        print(error_str)
+        return error_str
+    else:
+        return
+
 #parsing file
 for count, line in enumerate(Lines):
     #initializing line variables
@@ -628,12 +646,23 @@ for count, person in enumerate(family_list):
     if person["Wife ID"] in bigamy_dict:
         no_bigamy(bigamy_dict[person["Wife ID"]][0], person["Married"], bigamy_dict[person["Wife ID"]][1], person["Wife Name"], person["ID"], str(count+1))    
 
-#US18
 for family in family_list:
     children_list_split = family["Children"].split()
+    #US25
+    chil_name_birt = {}
+    for person in person_list:
+        for child in children_list_split:
+            if child.strip() == person["ID"].strip():
+                if person["Name"] not in chil_name_birt:
+                    chil_name_birt[person["Name"]] = [person["Birthday"]]
+                else:
+                    chil_name_birt[person["Name"]].append(person["Birthday"])
+    unique_first_family_names(chil_name_birt, str(count+1))
+    #US18
     for family2 in family_list:
         if (family2["Husband ID"].strip() in children_list_split) and (family2["Wife ID"].strip() in children_list_split):
             no_sibling_marriage(family2["Husband ID"], family2["Husband Name"], family2["Wife ID"], family2["Wife Name"], str(count+1))  
+    
 #US21
 husb_id_list, wife_id_list = [], []
 for p in family_list:
@@ -658,6 +687,28 @@ for count, x in enumerate(family_list):
         if x["ID"] == y:
             unique_id("FAM", x["ID"], x["Husband Name"], str(count+1))
     fam_ids_list.append(x["ID"])
+
+#US26
+individual_count_family = 0
+individual_count_person = 0
+p_list = []
+
+for person in person_list:
+    individual_count_person += 1
+for family in family_list:
+    if((family["Husband ID"] != "N/A") and (family["Husband ID"].strip() not in p_list)):
+        individual_count_family += 1
+        p_list.append(family["Husband ID"].strip())
+    if((family["Wife ID"] != "N/A") and (family["Wife ID"].strip() not in p_list)):
+        individual_count_family += 1
+        p_list.append(family["Wife ID"].strip())
+    for chil in family["Children"].split():
+        if chil.strip() not in p_list:
+            individual_count_family += 1
+            p_list.append(chil.strip())
+
+
+check_consistency(individual_count_person, individual_count_family)
 
 #adding individuals in the end
 for indiv_dict in person_list:

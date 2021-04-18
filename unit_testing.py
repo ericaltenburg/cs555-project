@@ -93,8 +93,12 @@ class TestGedcom(unittest.TestCase):
 			"ID" : "@F2@ "
 		}
 		self.assertEqual(same_spouse_name_marr_date(existing_fam_dict, new_fam_dict, "123"), "Error US24: Family @F2@ has the same spouse names and marriage date as family @F1@ on Families List line 123.")
-	
+	def test_unique_first_family_names(self):
+		self.assertEqual(unique_first_family_names({"Jane Doe":["3 AUG 2001","3 AUG 2001 "]}, "126"), "Anomaly US25: There are more than one instance of Jane Doe born on 3 AUG 2001 on line 126.")
+	def test_check_consistency(self):
+                self.assertEqual(check_consistency(4,5), "Error US26: Individual entries: 4 do not match Family entries: 5.")
 
+        
 
 if __name__ == '__main__':
 	unittest.main()
