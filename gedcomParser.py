@@ -470,6 +470,7 @@ for count, line in enumerate(Lines):
                     fams_last = False
             #finish individual
             indi_hit = False
+            #US31
             list_single_over_30(person_list[person_count-1]["Age"], person_list[person_count-1]["Spouse"], person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), str(count+1))
             continue
 
