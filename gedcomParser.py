@@ -337,6 +337,14 @@ def check_consistency(ind_count, fam_count):
         return error_str
     else:
         return
+#US31 List living single
+def list_single_over_30(indiv_age, spouse, indiv_name, indiv_id, lineNum):
+    if (spouse == "N/A" and indiv_age > 30):
+        info_str = f"Info US31: {indiv_name} ({indiv_id}) is over 30 years old at {indiv_age} and not married on line {lineNum}."
+        print(info_str)
+        return info_str
+    else:
+        return
 
 #parsing file
 for count, line in enumerate(Lines):
@@ -376,6 +384,15 @@ for count, line in enumerate(Lines):
         #begin dictionary for individual
         person_list.append({"ID":arguments})
         #jump back to first loop
+        #set everything to N/A initially and populate on sequential loops
+        person_list[person_count-1]["Name"] = "N/A"
+        person_list[person_count-1]["Gender"] = "N/A"
+        person_list[person_count-1]["Birthday"] = "N/A"
+        person_list[person_count-1]["Age"] = "N/A"
+        person_list[person_count-1]["Alive"] = "N/A"
+        person_list[person_count-1]["Death"] = "N/A"
+        person_list[person_count-1]["Child"] = "N/A"
+        person_list[person_count-1]["Spouse"] = "N/A"
         continue
     #checking still in individual tags
     if( indi_hit == True ):
@@ -445,6 +462,7 @@ for count, line in enumerate(Lines):
                     fams_last = False
             #finish individual
             indi_hit = False
+            list_single_over_30(person_list[person_count-1]["Age"], person_list[person_count-1]["Spouse"], person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), str(count+1))
             continue
 
     #US15
@@ -712,11 +730,6 @@ check_consistency(individual_count_person, individual_count_family)
 
 #adding individuals in the end
 for indiv_dict in person_list:
-     #Fills in child column if not complete
-    if("Spouse" not in indiv_dict):
-       indiv_dict["Spouse"] = "N/A"
-    if("Child" not in indiv_dict):
-       indiv_dict["Child"] = "N/A"
     individuals.add_row(indiv_dict.values())
     # Add to collection for individuals
     db.individuals.insert_one(indiv_dict)

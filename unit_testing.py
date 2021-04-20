@@ -73,12 +73,10 @@ class TestGedcom(unittest.TestCase):
 		self.assertEqual(unique_id("FAM", "I6", "Cody Martin", "43"), "Error US22: Family with husband Cody Martin does not have a unique ID (I6) on Families List line 43.")
 	def test_same_name_birthdate(self):
 		self.assertEqual(same_name_birthdate("Eric Altenburg", "Eric Altenburg", "04-14-1999", "04-14-1999", "I01", "I02", "123"), "Error US23: Individual with ID I01 has the same name and birth date as I02 on Individual List Line 123.")
-	
 	def test_recent_births(self):
 		self.assertEqual(recent_births(parse("13 APR 2021"), "Sam Case", "I35", "390"), "Info US35: Sam Case (I35) was born within the past 30 days on 2021-04-13 00:00:00 on line 390.")
 	def test_recent_deaths(self):
 		self.assertEqual(recent_deaths(parse("13 APR 2021"), "Pat Smith", "I28", "122"), "Info US36: Pat Smith (I28) has died within the past 30 days on 2021-04-13 00:00:00 on line 122.")
-
 	def test_same_spouse_name_marr_date(self):
 		existing_fam_dict = {
 			"Husband Name" : "Eric Altenburg",
@@ -96,9 +94,11 @@ class TestGedcom(unittest.TestCase):
 	def test_unique_first_family_names(self):
 		self.assertEqual(unique_first_family_names({"Jane Doe":["3 AUG 2001","3 AUG 2001 "]}, "126"), "Anomaly US25: There are more than one instance of Jane Doe born on 3 AUG 2001 on line 126.")
 	def test_check_consistency(self):
-                self.assertEqual(check_consistency(4,5), "Error US26: Individual entries: 4 do not match Family entries: 5.")
-
-        
+		self.assertEqual(check_consistency(4,5), "Error US26: Individual entries: 4 do not match Family entries: 5.")
+	def test_list_single_over_30_fail(self):
+		self.assertNotEqual(list_single_over_30(40, "@F3@", "Eric Altenburg", "@I7@", "123"), "Info US31: Eric Altenburg (@I7@) is over 30 years old at 40 and not married on line 123.")
+	def test_list_single_over_30_fail(self):
+		self.assertEqual(list_single_over_30(40, "N/A", "Eric Altenburg", "@I7@", "123"), "Info US31: Eric Altenburg (@I7@) is over 30 years old at 40 and not married on line 123.")
 
 if __name__ == '__main__':
 	unittest.main()

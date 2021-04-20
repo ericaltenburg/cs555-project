@@ -4,31 +4,31 @@ Individuals
 +--------+-----------------------+--------+--------------+-----+-------+--------------+-------+--------+
 |   ID   |          Name         | Gender |   Birthday   | Age | Alive |    Death     | Child | Spouse |
 +--------+-----------------------+--------+--------------+-----+-------+--------------+-------+--------+
-| @I1@   |     Laney /Smith/     |   F    | 9 SEP 1932   |  86 | False | 19 APR 2019  | @F1@  |  N/A   |
-| @I2@   |    Bill /Chasnov/     |   M    | 6 JUN 1928   |  85 | False | 10 SEP 2013  | @F2@  |  N/A   |
-| @I3@   |    Robin /Chasnov/    |   F    | 5 DEC 1990   |  30 |  True |     N/A      | @F2@  |  N/A   |
-| @I4@   |    Robyn /Chasnov/    |   F    | 15 FEB 1968  |  53 |  True |     N/A      | @F3@  | @F1@   |
-| @I5@   |    Adam /Chasnov/     |   M    | 8 JUL 1964   |  56 |  True |     N/A      |  N/A  | @F1@   |
-| @I6@   |   James /Garfield/    |   M    | 5 SEP 1967   |  53 |  True |     N/A      | @F3@  |  N/A   |
-| @I7@   |   Bryan /Garfield/    |   M    | 13 DEC 1999  |  21 |  True |     N/A      | @F3@  |  N/A   |
-| @I8@   |    Josh /Garfield/    |   M    | 3 AUG 2001   |  19 |  True |     N/A      |  N/A  | @F3@   |
-| @I9@   |  Rebecca /Garfield/   |   F    | 6 JUL 2007   |  13 |  True |     N/A      |  N/A  | @F3@   |
-| @I10@  |    Craig /Chasnov/    |   M    | 5 NOV 1963   |  57 |  True |     N/A      | @F4@  | @F1@   |
-| @I11@  |     Kelly /Adams/     |   F    | 2 APR 1969   |  51 |  True |     N/A      | @F4@  |  N/A   |
-| @I12@  |    Kara /Chasnov/     |   F    | 2 JUN 1999   |  21 |  True |     N/A      | @F4@  |  N/A   |
-| @I13@  |    Jenna /Chasnov/    |   F    | 6 FEB 2001   |  20 |  True |     N/A      |  N/A  | @F4@   |
-| @I14@  |    Donna /Chasnov/    |   F    | 6 SEP 1968   |  52 |  True |     N/A      | @F5@  | @F1@   |
-| @I15@  |  Richard /Altenburg/  |   M    | 17 JUN 1964  |  56 |  True |     N/A      | @F5@  | @F6@   |
-| @I16@  |   Eric /Altenburg/    |   M    | 14 APR 1999  |  21 |  True |     N/A      |  N/A  | @F5@   |
-| @I17@  |   Kyle /Altenburg/    |   M    | 15 MAY 2003  |  17 |  True |     N/A      |  N/A  | @F5@   |
-| @I18@  |  Richard /Altenburg/  |   M    | 26 MAR 1934  |  85 | False | 4 DEC 2019   | @F6@  |  N/A   |
-| @I19@  | Loretta /Florkowski/  |   F    | 16 DEC 1939  |  81 |  True |     N/A      | @F6@  |  N/A   |
-| @I20@  |   Vicki /Altenburg/   |   F    | 8 DEC 1960   |  60 |  True |     N/A      | @F6@  |  N/A   |
-| @I21@  |  Valorie /Altenburg/  |   F    | 5 SEP 1962   |  58 |  True |     N/A      | @F7@  | @F6@   |
-| @I22@  |   Steve /Kaletcher/   |   M    | 27 JUL 1959  |  61 |  True |     N/A      | @F7@  |  N/A   |
-| @I23@  | Kristine /Kaletcher/  |   F    | 4 JUN 1995   |  25 |  True |     N/A      | @F7@  |  N/A   |
-| @I24@  |    Amy /Kaletcher/    |   F    | 24 APR 1997  |  23 |  True |     N/A      |  N/A  | @F7@   |
-| @I25@  |   Emily /Kaletcher/   |   F    | 16 OCT 1998  |  22 |  True |     N/A      |  N/A  | @F7@   |
+| @I1@   |     Laney /Smith/     |   F    | 9 SEP 1932   |  86 | False | 19 APR 2019  |  N/A8 | @F1@   |
+| @I2@   |    Bill /Chasnov/     |   M    | 6 JUN 1928   |  85 | False | 10 SEP 2013  |  N/A8 | @F2@   |
+| @I3@   |    Robin /Chasnov/    |   F    | 5 DEC 1990   |  30 |  True |     N/A      | @F2@  |  N/A9  |
+| @I4@   |    Robyn /Chasnov/    |   F    | 15 FEB 1968  |  53 |  True |     N/A      | @F1@  | @F3@   |
+| @I5@   |    Adam /Chasnov/     |   M    | 8 JUL 1964   |  56 |  True |     N/A      | @F1@  |  N/A   |
+| @I6@   |   James /Garfield/    |   M    | 5 SEP 1967   |  53 |  True |     N/A      |  N/A8 | @F3@   |
+| @I7@   |   Bryan /Garfield/    |   M    | 13 DEC 1999  |  21 |  True |     N/A      | @F3@  |  N/A9  |
+| @I8@   |    Josh /Garfield/    |   M    | 3 AUG 2001   |  19 |  True |     N/A      | @F3@  |  N/A   |
+| @I9@   |  Rebecca /Garfield/   |   F    | 6 JUL 2007   |  13 |  True |     N/A      | @F3@  |  N/A   |
+| @I10@  |    Craig /Chasnov/    |   M    | 5 NOV 1963   |  57 |  True |     N/A      | @F1@  | @F4@   |
+| @I11@  |     Kelly /Adams/     |   F    | 2 APR 1969   |  52 |  True |     N/A      |  N/A8 | @F4@   |
+| @I12@  |    Kara /Chasnov/     |   F    | 2 JUN 1999   |  21 |  True |     N/A      | @F4@  |  N/A9  |
+| @I13@  |    Jenna /Chasnov/    |   F    | 6 FEB 2001   |  20 |  True |     N/A      | @F4@  |  N/A   |
+| @I14@  |    Donna /Chasnov/    |   F    | 6 SEP 1968   |  52 |  True |     N/A      | @F1@  | @F5@   |
+| @I15@  |  Richard /Altenburg/  |   M    | 17 JUN 1964  |  56 |  True |     N/A      | @F6@  | @F5@   |
+| @I16@  |   Eric /Altenburg/    |   M    | 14 APR 1999  |  22 |  True |     N/A      | @F5@  |  N/A   |
+| @I17@  |   Kyle /Altenburg/    |   M    | 15 MAY 2003  |  17 |  True |     N/A      | @F5@  |  N/A   |
+| @I18@  |  Richard /Altenburg/  |   M    | 26 MAR 1934  |  85 | False | 4 DEC 2019   |  N/A8 | @F6@   |
+| @I19@  | Loretta /Florkowski/  |   F    | 16 DEC 1939  |  81 |  True |     N/A      |  N/A8 | @F6@   |
+| @I20@  |   Vicki /Altenburg/   |   F    | 8 DEC 1960   |  60 |  True |     N/A      | @F6@  |  N/A9  |
+| @I21@  |  Valorie /Altenburg/  |   F    | 5 SEP 1962   |  58 |  True |     N/A      | @F6@  | @F7@   |
+| @I22@  |   Steve /Kaletcher/   |   M    | 27 JUL 1959  |  61 |  True |     N/A      |  N/A8 | @F7@   |
+| @I23@  | Kristine /Kaletcher/  |   F    | 4 JUN 1995   |  25 |  True |     N/A      | @F7@  |  N/A9  |
+| @I24@  |    Amy /Kaletcher/    |   F    | 24 APR 1997  |  23 |  True |     N/A      | @F7@  |  N/A   |
+| @I25@  |   Emily /Kaletcher/   |   F    | 16 OCT 1998  |  22 |  True |     N/A      | @F7@  |  N/A   |
 +--------+-----------------------+--------+--------------+-----+-------+--------------+-------+--------+
 Families
 +-------+------------+----------------------+---------+-----------------------+------------------------+--------------+-------------+
