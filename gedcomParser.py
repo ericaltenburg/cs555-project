@@ -345,6 +345,14 @@ def list_single_over_30(indiv_age, spouse, indiv_name, indiv_id, lineNum):
         return info_str
     else:
         return
+#US32 List all multiple births in a GEDCOM file
+def list_all_multiple_births(children_list_len, fam_id, lineNum):
+    if (children_list_len > 1):
+        info_str = f"Info US32: Family {fam_id} has multiple births ({children_list_len}) on line {lineNum}."
+        print(info_str)
+        return info_str
+    else:
+        return
 
 #parsing file
 for count, line in enumerate(Lines):
@@ -382,7 +390,7 @@ for count, line in enumerate(Lines):
         #count for dictionary index
         person_count += 1
         #begin dictionary for individual
-        person_list.append({"ID":arguments})
+        person_list.append({"ID":arguments.replace("@","")})
         #jump back to first loop
         #set everything to N/A initially and populate on sequential loops
         person_list[person_count-1]["Name"] = "N/A"
@@ -399,7 +407,7 @@ for count, line in enumerate(Lines):
         #Appending to individual dictionary - Checks
         #Name check
         if(tag == "NAME"):
-            person_list[person_count-1]["Name"] = arguments
+            person_list[person_count-1]["Name"] = arguments.replace("/", "")
             continue
         if(tag == "SEX"):
             person_list[person_count-1]["Gender"] = arguments
@@ -450,15 +458,15 @@ for count, line in enumerate(Lines):
                 deat_next = False
         #adding child and spouse
             if(tag == "FAMS"):
-                person_list[person_count-1]["Spouse"] = arguments
+                person_list[person_count-1]["Spouse"] = arguments.replace("@","")
                 fams_last = True
                 continue
             if(tag == "FAMC"):
                 if(not fams_last):
                     person_list[person_count-1]["Spouse"] = "N/A"
-                    person_list[person_count-1]["Child"] = arguments
+                    person_list[person_count-1]["Child"] = arguments.replace("@","")
                 else:
-                    person_list[person_count-1]["Child"] = arguments
+                    person_list[person_count-1]["Child"] = arguments.replace("@","")
                     fams_last = False
             #finish individual
             indi_hit = False
@@ -469,6 +477,8 @@ for count, line in enumerate(Lines):
     if (family_count > 0 and "Children" in family_list[family_count-1]):
         if (tag == "TRLR"):
             more_than_15_siblings(len(old_children_list), family_list[family_count-2]["ID"].strip(), str(count+1))
+            #US32
+            list_all_multiple_births(len(old_children_list), family_list[family_count-2]["ID"].strip(), str(count+1))
             bday_list = []
             for child in old_children_list:
                 for p_dict in person_list:
@@ -486,6 +496,8 @@ for count, line in enumerate(Lines):
 
         if (family_list[family_count-1]["Children"].split()[0] != old_children_list[0]):
             more_than_15_siblings(len(old_children_list), family_list[family_count-2]["ID"].strip(), str(count+1))
+            #US32
+            list_all_multiple_births(len(old_children_list), family_list[family_count-2]["ID"].strip(), str(count+1))
             bday_list = []
             for child in old_children_list:
                 for p_dict in person_list:
@@ -502,7 +514,7 @@ for count, line in enumerate(Lines):
     if(indi_hit == False and person_list):
         #adding new family row
         if(tag == "FAM"):
-            family_list.append({"ID":arguments})
+            family_list.append({"ID":arguments.replace("@","")})
             family_count+=1
             husb_next = True
             continue
@@ -515,8 +527,8 @@ for count, line in enumerate(Lines):
         if(tag == "HUSB"):
             husb_next = False
             wife_next = True
-            family_list[family_count-1]["Husband ID"] = arguments
-            family_list[family_count-1]["Husband Name"] = next((sub for sub in person_list if sub['ID'] == arguments))["Name"]
+            family_list[family_count-1]["Husband ID"] = arguments.replace("@","")
+            family_list[family_count-1]["Husband Name"] = next((sub for sub in person_list if sub['ID'] == arguments.replace("@","")))["Name"]
             continue
         if(wife_next == True  and tag!= "WIFE"):
             wife_next = False
@@ -526,8 +538,8 @@ for count, line in enumerate(Lines):
         if(tag == "WIFE"):
             wife_next = False
             chil_next = True
-            family_list[family_count-1]["Wife ID"] = arguments
-            family_list[family_count-1]["Wife Name"] = next((sub for sub in person_list if sub['ID'] == arguments))["Name"]
+            family_list[family_count-1]["Wife ID"] = arguments.replace("@","")
+            family_list[family_count-1]["Wife Name"] = next((sub for sub in person_list if sub['ID'] == arguments.replace("@","")))["Name"]
             continue
         #child check, will continue appending until child tag over
         if(chil_next == True and tag != "CHIL"):
@@ -538,9 +550,9 @@ for count, line in enumerate(Lines):
             chil_next = False
             marr_next = True
             if "Children" in family_list[family_count-1]:
-                (family_list[family_count-1]["Children"]) += (arguments)
+                (family_list[family_count-1]["Children"]) += (arguments.replace("@",""))
             else:
-                family_list[family_count-1]["Children"] = arguments
+                family_list[family_count-1]["Children"] = arguments.replace("@","")
            
             #US16
             for p_dict in person_list:

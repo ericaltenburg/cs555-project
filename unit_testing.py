@@ -97,8 +97,11 @@ class TestGedcom(unittest.TestCase):
 		self.assertEqual(check_consistency(4,5), "Error US26: Individual entries: 4 do not match Family entries: 5.")
 	def test_list_single_over_30_fail(self):
 		self.assertNotEqual(list_single_over_30(40, "@F3@", "Eric Altenburg", "@I7@", "123"), "Info US31: Eric Altenburg (@I7@) is over 30 years old at 40 and not married on line 123.")
-	def test_list_single_over_30_fail(self):
+	def test_list_single_over_30_pass(self):
 		self.assertEqual(list_single_over_30(40, "N/A", "Eric Altenburg", "@I7@", "123"), "Info US31: Eric Altenburg (@I7@) is over 30 years old at 40 and not married on line 123.")
-
+	def test_list_all_multiple_births(self):
+		self.assertNotEqual(list_all_multiple_births(1, "F1", "123"), "Info US32: Family F1 has multiple births (1) on line 123.")
+	def test_list_all_multiple_births_pass(self):
+		self.assertEqual(list_all_multiple_births(2, "F1", "123"), "Info US32: Family F1 has multiple births (2) on line 123.")
 if __name__ == '__main__':
 	unittest.main()
