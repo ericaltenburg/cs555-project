@@ -95,6 +95,8 @@ class TestGedcom(unittest.TestCase):
 		self.assertEqual(unique_first_family_names({"Jane Doe":["3 AUG 2001","3 AUG 2001 "]}, "126"), "Anomaly US25: There are more than one instance of Jane Doe born on 3 AUG 2001 on line 126.")
 	def test_check_consistency(self):
 		self.assertEqual(check_consistency(4,5), "Error US26: Individual entries: 4 do not match Family entries: 5.")
+	def test_check_age(self):
+		self.assertEqual(check_age("02-22-1999"), 22)
 	def test_list_single_over_30_fail(self):
 		self.assertNotEqual(list_single_over_30(40, "@F3@", "Eric Altenburg", "@I7@", "123"), "Info US31: Eric Altenburg (@I7@) is over 30 years old at 40 and not married on line 123.")
 	def test_list_single_over_30_pass(self):

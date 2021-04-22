@@ -329,6 +329,7 @@ def unique_first_family_names(chil_name_birt_list, lineNum):
             print(error_str)
             return error_str
     return
+    
 #US26 Check for consistency between individuals and family
 def check_consistency(ind_count, fam_count):
     if ind_count != fam_count:
@@ -337,6 +338,12 @@ def check_consistency(ind_count, fam_count):
         return error_str
     else:
         return
+#US27 Include individual ages
+def check_age(birthday):
+    birthday = datetime.date(parse(birthday))
+    age = today.year - birthday.year - ((today.month, today.day) < (birthday.month, birthday.day))
+    return age
+
 #US31 List living single
 def list_single_over_30(indiv_age, spouse, indiv_name, indiv_id, lineNum):
     if (spouse == "N/A" and indiv_age > 30):
@@ -427,6 +434,7 @@ for count, line in enumerate(Lines):
                 if (p_dict["ID"].strip() != person_list[person_count-1]["ID"].strip()):
                     same_name_birthdate(person_list[person_count-1]["Name"], p_dict["Name"], arguments, p_dict["Birthday"], person_list[person_count-1]["ID"].strip(), p_dict["ID"].strip(), str(count+1))
             person_list[person_count-1] ["Birthday"] = arguments
+            #US27
             person_list[person_count-1]["Age"] = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
             #us01
             before_current_date(arguments, person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), "Birth", str(count+1))
