@@ -97,6 +97,8 @@ class TestGedcom(unittest.TestCase):
 		self.assertEqual(check_consistency(4,5), "Error US26: Individual entries: 4 do not match Family entries: 5.")
 	def test_check_age(self):
 		self.assertEqual(check_age("02-22-1999"), 22)
+	def test_order_siblings_by_age(self):
+		self.assertEqual(order_siblings_by_age({"Megan":['08-28-2000'], "Cara":['12-02-1999'], "Eva":['4-28-2004'], "Sean":['10-15-1994']}, "F12"), "Info US28: Family F12's siblings ordered by decreasing age: Sean (10-15-1994), Cara (12-02-1999), Megan (08-28-2000), Eva (4-28-2004)")
 	def test_list_single_over_30_fail(self):
 		self.assertNotEqual(list_single_over_30(40, "@F3@", "Eric Altenburg", "@I7@", "123"), "Info US31: Eric Altenburg (@I7@) is over 30 years old at 40 and not married on line 123.")
 	def test_list_single_over_30_pass(self):

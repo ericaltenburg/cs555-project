@@ -344,6 +344,21 @@ def check_age(birthday):
     age = today.year - birthday.year - ((today.month, today.day) < (birthday.month, birthday.day))
     return age
 
+#US28 Order sublings by age
+def order_siblings_by_age(sib_dict, fam_id):
+    sorted_sib = dict(sorted(sib_dict.items(), key = lambda x: datetime.date(parse(x[1][0]))))
+    info_str = f"Info US28: Family {fam_id}'s siblings ordered by decreasing age: "
+    num = 0
+    for key, value in sorted_sib.items():
+        ordered = f"{key.strip()} ({value[0].strip()})"
+        if num == len(sorted_sib) - 1:
+            info_str += ordered
+        else:
+            info_str += ordered + ", "
+            num += 1
+    print(info_str)
+    return info_str
+
 #US31 List living single
 def list_single_over_30(indiv_age, spouse, indiv_name, indiv_id, lineNum):
     if (spouse == "N/A" and indiv_age > 30):
@@ -697,6 +712,8 @@ for family in family_list:
                 else:
                     chil_name_birt[person["Name"]].append(person["Birthday"])
     unique_first_family_names(chil_name_birt, str(count+1))
+    #US28
+    order_siblings_by_age(chil_name_birt, family["ID"].strip())
     #US18
     for family2 in family_list:
         if (family2["Husband ID"].strip() in children_list_split) and (family2["Wife ID"].strip() in children_list_split):
