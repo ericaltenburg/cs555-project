@@ -379,8 +379,8 @@ def list_living_married(indiv_name, indiv_id, death, spouse, lineNum):
 
 
 #US31 List living single
-def list_single_over_30(indiv_age, spouse, indiv_name, indiv_id, lineNum):
-    if (spouse == "N/A" and indiv_age > 30):
+def list_single_over_30(indiv_age, spouse, indiv_name, alive, indiv_id, lineNum):
+    if (spouse == "N/A" and indiv_age > 30 and alive):
         info_str = f"Info US31: {indiv_name} ({indiv_id}) is over 30 years old at {indiv_age} and not married on line {lineNum}."
         print(info_str)
         return info_str
@@ -515,7 +515,7 @@ for count, line in enumerate(Lines):
             #finish individual
             indi_hit = False
             #US31
-            list_single_over_30(person_list[person_count-1]["Age"], person_list[person_count-1]["Spouse"], person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), str(count+1))
+            list_single_over_30(person_list[person_count-1]["Age"], person_list[person_count-1]["Spouse"], person_list[person_count-1]["Name"], person_list[person_count-1]["Alive"], person_list[person_count-1]["ID"].strip(), str(count+1))
 			#US30
             list_living_married(person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), person_list[person_count-1]["Death"], person_list[person_count-1]["Spouse"], str(count+1))
 
@@ -806,8 +806,9 @@ for fam_dict in family_list:
     # Add to collection for families
     db.families.insert_one(fam_dict)
 print("Done adding families to \'families\' collection.")
-        
-        
+
+# US 26 and 27  
+print("\nInfo US26 & US27:\n")
 print("Individuals")
 print(individuals)
 
