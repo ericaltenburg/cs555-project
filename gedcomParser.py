@@ -482,6 +482,8 @@ for count, line in enumerate(Lines):
             death = parse(arguments)
 			#US36
             recent_deaths(death, person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), str(count+1))
+            #US29
+            list_deceased(person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), person_list[person_count-1]["Death"], str(count+1))
             person_list[person_count-1]["Age"] = (death.year - born.year - ((death.month, death.day) < (born.month, born.day)))
             #us01
             before_current_date(arguments, person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), "Death", str(count+1))
@@ -516,8 +518,6 @@ for count, line in enumerate(Lines):
             list_single_over_30(person_list[person_count-1]["Age"], person_list[person_count-1]["Spouse"], person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), str(count+1))
 			#US30
             list_living_married(person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), person_list[person_count-1]["Death"], person_list[person_count-1]["Spouse"], str(count+1))
-			#US29
-            list_deceased(person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), person_list[person_count-1]["Death"], str(count+1))
 
             continue
 
