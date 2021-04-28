@@ -98,7 +98,17 @@ class TestGedcom(unittest.TestCase):
 	def test_check_age(self):
 		self.assertEqual(check_age("02-22-1999"), 22)
 	def test_order_siblings_by_age(self):
-		self.assertEqual(order_siblings_by_age({"Megan":['08-28-2000'], "Cara":['12-02-1999'], "Eva":['4-28-2004'], "Sean":['10-15-1994']}, "F12"), "Info US28: Family F12's siblings ordered by decreasing age: Sean (10-15-1994), Cara (12-02-1999), Megan (08-28-2000), Eva (4-28-2004)")
+		self.assertEqual(order_siblings_by_age({"Megan":['08-28-2000'], "Cara":['12-02-1999'], "Eva":['4-28-2004'], "Sean":['10-15-1994']}, "F12"), "Info US28: Family F12's siblings ordered by decreasing age: Sean (10-15-1994), Cara (12-02-1999), Megan (08-28-2000), Eva (4-28-2004)")		
+	def test_deceased_fail(self):
+		self.assertNotEqual(list_deceased("Emily Grayson", "@I12@", "N/A", "260"), "Info US29: Emily Grayson (@I12@) is deceased on line 260")
+	def test_deceased_pass(self):
+		self.assertEqual(list_deceased("Trina Robertson", "@I12@", "9 Jun 1999", "260"), "Info US29: Trina Robertson (@I12@) is deceased on line 260")
+	def test_living_married_pass(self):
+		self.assertEqual(list_living_married("Amy Clark", "@I8@", "N/A", "@F5@", "200"), "Info US30: Amy Clark (@I8@) is alive and married on line 200")
+	def test_living_married_fail(self):
+		self.assertNotEqual(list_living_married("Thomas Grayson", "@I13@", "N/A", "N/A", "260"), "Info US30: Thomas Grayson (@I13@) is alive and married on line 260")
+	def test_living_married_fail(self):
+		self.assertNotEqual(list_living_married("Katie Noel", "@I20@", "20 SEPT 1980", "@F10", "360"), "Info US30: Katie Noel (@I20@) is alive and married on line 360")
 	def test_list_single_over_30_fail(self):
 		self.assertNotEqual(list_single_over_30(40, "@F3@", "Eric Altenburg", "@I7@", "123"), "Info US31: Eric Altenburg (@I7@) is over 30 years old at 40 and not married on line 123.")
 	def test_list_single_over_30_pass(self):

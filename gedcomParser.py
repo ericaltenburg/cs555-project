@@ -359,6 +359,25 @@ def order_siblings_by_age(sib_dict, fam_id):
     print(info_str)
     return info_str
 
+#US29 List deceased
+def list_deceased(indiv_name, indiv_id, death, lineNum):
+	if (death != "N/A"):
+		info_str = f"Info US29: {indiv_name} ({indiv_id}) is deceased on line {lineNum}"
+		print(info_str)
+		return(info_str)
+	else:
+		return
+
+#US30 List all living married people
+def list_living_married(indiv_name, indiv_id, death, spouse, lineNum):
+	if (death == "N/A" and spouse != "N/A"):
+		info_str = f"Info US30: {indiv_name} ({indiv_id}) is alive and married on line {lineNum}"
+		print(info_str)
+		return(info_str)
+	else:
+		return
+
+
 #US31 List living single
 def list_single_over_30(indiv_age, spouse, indiv_name, indiv_id, lineNum):
     if (spouse == "N/A" and indiv_age > 30):
@@ -495,6 +514,11 @@ for count, line in enumerate(Lines):
             indi_hit = False
             #US31
             list_single_over_30(person_list[person_count-1]["Age"], person_list[person_count-1]["Spouse"], person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), str(count+1))
+			#US30
+            list_living_married(person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), person_list[person_count-1]["Death"], person_list[person_count-1]["Spouse"], str(count+1))
+			#US29
+            list_deceased(person_list[person_count-1]["Name"], person_list[person_count-1]["ID"].strip(), person_list[person_count-1]["Death"], str(count+1))
+
             continue
 
     #US15
